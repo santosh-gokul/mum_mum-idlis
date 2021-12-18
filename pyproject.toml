@@ -6,7 +6,7 @@ authors = ["N Santosh Gokul  <n.santoshgokul@gmail.com>"]
 license = "GNU"
 
 [tool.poetry.dependencies]
-python = "3.9.4"
+python = "^3.8"
 fastapi = "^0.67.0"
 black = "^21.7b0"
 pydantic = "^1.8.2"

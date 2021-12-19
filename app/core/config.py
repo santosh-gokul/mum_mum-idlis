@@ -2,9 +2,9 @@ from pydantic import  BaseSettings
 import os
 
 class Settings(BaseSettings):
-    URL: str = os.getenv("URL")
-    TOKEN: str = os.getenv("TOKEN")
-    HOST: str = os.getenv("HOST")
-    PORT: int = os.getenv("PORT")
+    URL: str = os.environ["URL"]
+    TOKEN: str = os.environ["TOKEN"]
+    HOST: str = os.environ["HOST"]
+    PORT: int = os.environ["PORT"]
 
 settings = Settings()

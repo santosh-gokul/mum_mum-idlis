@@ -12,6 +12,7 @@ black = "^21.7b0"
 pydantic = "^1.8.2"
 python-env = "^1.0.0"
 uvicorn = "^0.14.0"
+python-telegram-bot = "^13.9"
 
 
 [tool.poetry.dev-dependencies]

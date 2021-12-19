@@ -1,8 +1,8 @@
 from uuid import uuid4
 
-import telegram
 from fastapi import FastAPI
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Invoice, LabeledPrice
+import telegram
 from app.core.config import settings
 
 app = FastAPI()

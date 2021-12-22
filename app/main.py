@@ -87,6 +87,7 @@ def button(update) -> None:
 @app.get('/set_webhook')
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=settings.URL, HOOK=settings.TOKEN))
+    print(s)
     if s:
         return "webhook setup failed"
     else:

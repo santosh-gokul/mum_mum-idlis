@@ -34,7 +34,7 @@ def respond(payload: dict) -> None:
             bot.send_message(update.message.chat_id, text="Sorry, I don't uderstand!")
 
 
-def start(update) -> None:
+def start(update,chat_data) -> None:
     """Sends a message with three inline buttons attached."""
     key = str(uuid4())
     keyboard = [
@@ -87,7 +87,6 @@ def button(update) -> None:
 @app.get('/set_webhook')
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=settings.URL, HOOK=settings.TOKEN))
-    print(s)
     if not s:
         return "webhook setup failed"
     else:

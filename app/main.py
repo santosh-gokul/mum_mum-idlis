@@ -49,7 +49,8 @@ def start(update,chat_data) -> None:
 
     chat_data[update.message.chat_id] = {}
     chat_data[update.message.chat_id][key] = {"1": False, "2": False}
-    bot.edit_message_text('Hey!, What would you like to order?:', reply_markup=reply_markup)
+    bot.edit_message_text('Hey!, What would you like to order?:', reply_markup=reply_markup,
+                          chat_id=update.message.chat_id, message_id=update.message.message_id)
 
 
 def button(update) -> None:
@@ -82,7 +83,8 @@ def button(update) -> None:
         print(chat_data)
         reply_markup = InlineKeyboardMarkup(keyboard)
 
-        bot.edit_message_text('Hey, What would you like to order today?', reply_markup=reply_markup)
+        bot.edit_message_text('Hey, What would you like to order today?', reply_markup=reply_markup,
+                              chat_id=update.message.chat_id, message_id=update.message.message_id)
 
 
 @app.get('/set_webhook')

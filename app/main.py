@@ -57,6 +57,7 @@ def start(update,chat_data) -> None:
 def button(update) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
+    print(chat_data, "---------------------")
 
     if str(query.data).startswith("PO"):
         invoice_handler = Invoice("a", "a", "a", "a", 100)
@@ -81,7 +82,7 @@ def button(update) -> None:
             ],
         ]
 
-        print(chat_data)
+
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup

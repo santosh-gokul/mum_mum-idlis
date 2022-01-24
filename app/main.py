@@ -60,8 +60,7 @@ def button(update) -> None:
 
     if str(query.data).startswith("PO"):
         invoice_handler = Invoice("a", "a", "a", "a", 100)
-        bot.edit_message_text(text = "Thankyou for placing the order, find the invoice below"
-                              ,chat_id=update.callback_query.message.chat.id, message_id=update.callback_query.message.message_id)
+        bot.edit_message_text(text = "Thankyou for placing the order, find the invoice below" ,chat_id=update.callback_query.message.chat.id)
         bot.send_invoice("Purchase Summary", "Total order for the day", "Idk",
                          "284685063:TEST:ODAyNjg0MWVhNmVl", "INR",
                          [LabeledPrice('Idli', 100000)])

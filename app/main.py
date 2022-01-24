@@ -15,6 +15,7 @@ chat_data = {}
 @app.post(f"/{settings.TOKEN}")
 def respond(payload: dict) -> None:
     update = telegram.Update.de_json(payload, bot)
+    print("UPDATE===========================",update)
     chat_id = update.message.chat.id
     msg_id = update.message.message_id
     print("Chat id: ", chat_id, " Message id: ", msg_id)

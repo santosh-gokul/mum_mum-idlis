@@ -49,8 +49,7 @@ def start(update,chat_data) -> None:
 
     chat_data[update.message.chat_id] = {}
     chat_data[update.message.chat_id][key] = {"1": False, "2": False}
-    bot.sendMessage('Hey!, What would you like to order?:', reply_markup=reply_markup,
-                     chat_id=update.message.chat_id)
+    bot.sendMessage('Hey!, What would you like to order?:', reply_markup=reply_markup)
 
 
 def button(update) -> None:

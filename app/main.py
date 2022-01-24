@@ -15,15 +15,15 @@ chat_data = {}
 @app.post(f"/{settings.TOKEN}")
 def respond(payload: dict) -> None:
     update = telegram.Update.de_json(payload, bot)
-    print("UPDATE===========================",update)
-    chat_id = update.message.chat.id
-    msg_id = update.message.message_id
-    print("Chat id: ", chat_id, " Message id: ", msg_id)
 
     query = update.callback_query
     if query is not None:
         button(update)
     else:
+        print("UPDATE===========================", update)
+        chat_id = update.message.chat.id
+        msg_id = update.message.message_id
+        print("Chat id: ", chat_id, " Message id: ", msg_id)
         if str(update.message.chat_id) in chat_data.keys():
             if (update.message.text == 'order'):
                 start(update, chat_data)
@@ -60,22 +60,23 @@ def button(update) -> None:
 
     if str(query.data).startswith("PO"):
         invoice_handler = Invoice("a", "a", "a", "a", 100)
-        bot.edit_message_text("Thankyou for placing the order, find the invoice below")
+        bot.edit_message_text(text = "Thankyou for placing the order, find the invoice below"
+                              ,chat_id=update.callback_query.message.chat.id, message_id=update.callback_query.message.message_id)
         bot.send_invoice("Purchase Summary", "Total order for the day", "Idk",
                          "284685063:TEST:ODAyNjg0MWVhNmVl", "INR",
                          [LabeledPrice('Idli', 100000)])
 
     else:
-        chat_data[update.effective_chat.id][query.data.split(':')[1]][query.data.split(':')[0]] = not \
-            chat_data[update.effective_chat.id][query.data.split(':')[1]][query.data.split(':')[0]]
+        chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0]] = not \
+            chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0]]
 
         keyboard = [
             [
                 InlineKeyboardButton(products_map["1"] + (
-                    "✔️" if chat_data[update.effective_chat.id][query.data.split(':')[1]]["1"] else ""),
+                    "✔️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"] else ""),
                                      callback_data="1:" + query.data.split(':')[1]),
                 InlineKeyboardButton(products_map["2"] + (
-                    "✔️" if chat_data[update.effective_chat.id][query.data.split(':')[1]]["2"] else ""),
+                    "✔️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["2"] else ""),
                                      callback_data="2:" + query.data.split(':')[1]),
                 InlineKeyboardButton("Place order.", callback_data="PO:" + query.data.split(':')[1])
             ],
@@ -84,8 +85,8 @@ def button(update) -> None:
         print(chat_data)
         reply_markup = InlineKeyboardMarkup(keyboard)
 
-        bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup,
-                              chat_id=update.message.chat_id, message_id=update.message.message_id)
+        bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup
+        , chat_id = update.callback_query.message.chat.id, message_id = update.callback_query.message.message_id)
 
 
 @app.get('/set_webhook')
@@ -95,3 +96,5 @@ def set_webhook():
         return "webhook setup failed"
     else:
         return "webhook setup ok"
+
+

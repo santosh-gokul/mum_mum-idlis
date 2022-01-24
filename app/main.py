@@ -47,6 +47,7 @@ def start(update,chat_data) -> None:
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
+    chat_data[update.message.chat_id] = {}
     chat_data[update.message.chat_id][key] = {"1": False, "2": False}
     bot.edit_message_text('Hey!, What would you like to order?:', reply_markup=reply_markup)
 

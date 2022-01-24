@@ -57,7 +57,7 @@ def start(update,chat_data) -> None:
 def button(update) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
-    print(chat_data, "---------------------")
+    print(type(chat_data.keys()[0]), "---------------------")
 
     if str(query.data).startswith("PO"):
         invoice_handler = Invoice("a", "a", "a", "a", 100)

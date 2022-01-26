@@ -71,10 +71,10 @@ def button(update) -> None:
         keyboard = [
 
                 [InlineKeyboardButton(products_map["1"] + (
-                    "✔️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"] else ""),
+                    "🟢️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"] else ""),
                                      callback_data="1:" + query.data.split(':')[1])],
                 [InlineKeyboardButton(products_map["2"] + (
-                    "✔️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["2"] else ""),
+                    "🟢" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["2"] else ""),
                                      callback_data="2:" + query.data.split(':')[1])],
                 [InlineKeyboardButton("Place order.", callback_data="PO:" + query.data.split(':')[1])]
         ]

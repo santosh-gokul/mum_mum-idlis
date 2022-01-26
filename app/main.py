@@ -11,7 +11,6 @@ bot = telegram.Bot(token="5037044076:AAEc8BFWgcVDZa5pRFLaTt1FkN89xnnmsDg")
 products_map = {"1": 'Single plate idlis (set of 5pcs)', "2": 'Family pack (set of 25pcs)'}
 chat_data = {}
 
-
 @app.post(f"/{settings.TOKEN}")
 def respond(payload: dict) -> None:
     update = telegram.Update.de_json(payload, bot)
@@ -58,9 +57,10 @@ def button(update) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
 
+    print(query, "QUERY-----------------") #Confirm later the field access correctly.
     if str(query.data).startswith("PO"):
         bot.edit_message_text(text = "Thankyou for placing the order, "
-                                     "find the invoice in the link below." ,chat_id=update.callback_query.message.chat.id,
+                                     "follow the link below to complete the payment." ,chat_id=update.callback_query.message.chat.id,
                               message_id=update.callback_query.message.message_id
                               )
 
@@ -69,15 +69,14 @@ def button(update) -> None:
             chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0]]
 
         keyboard = [
-            [
-                InlineKeyboardButton(products_map["1"] + (
+
+                [InlineKeyboardButton(products_map["1"] + (
                     "✔️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"] else ""),
-                                     callback_data="1:" + query.data.split(':')[1]),
-                InlineKeyboardButton(products_map["2"] + (
+                                     callback_data="1:" + query.data.split(':')[1])],
+                [InlineKeyboardButton(products_map["2"] + (
                     "✔️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["2"] else ""),
-                                     callback_data="2:" + query.data.split(':')[1]),
-                InlineKeyboardButton("Place order.", callback_data="PO:" + query.data.split(':')[1])
-            ],
+                                     callback_data="2:" + query.data.split(':')[1])],
+                [InlineKeyboardButton("Place order.", callback_data="PO:" + query.data.split(':')[1])]
         ]
 
 

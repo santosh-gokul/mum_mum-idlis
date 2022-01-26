@@ -32,7 +32,7 @@ def respond(payload: dict) -> None:
         elif (update.message.text == 'order'):
             start(update, chat_data)
         else:
-            bot.send_message(update.message.chat_id, text="Sorry, I don't uderstand!")
+            bot.send_message(update.message.chat_id, text="Sorry, I don't understand!")
 
 
 def start(update,chat_data) -> None:
@@ -57,7 +57,6 @@ def start(update,chat_data) -> None:
 def button(update) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
-    print(type(list(chat_data.keys())[0]),  type(update.callback_query.message.chat.id),"---------------------")
 
     if str(query.data).startswith("PO"):
         invoice_handler = Invoice("a", "a", "a", "a", 100)
@@ -86,7 +85,7 @@ def button(update) -> None:
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup
-        , chat_id = update.callback_query.message.chat.id, message_id = update.callback_query.message.message_id)
+        , chat_id = update.callback_query.message.chat.id)
 
 
 @app.get('/set_webhook')

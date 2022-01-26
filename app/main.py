@@ -38,11 +38,11 @@ def start(update,chat_data) -> None:
     """Sends a message with three inline buttons attached."""
     key = str(uuid4())
     keyboard = [
-        [
-            InlineKeyboardButton("Single plate idlis (set of 5pcs)", callback_data="1:" + key),
-            InlineKeyboardButton("Family pack (set of 25pcs)", callback_data="2:" + key),
-            InlineKeyboardButton("Place order.", callback_data="PO:" + key)
-        ],
+
+            [InlineKeyboardButton("Single plate idlis (set of 5pcs)", callback_data="1:" + key)],
+            [InlineKeyboardButton("Family pack (set of 25pcs)", callback_data="2:" + key)],
+            [InlineKeyboardButton("Place order.", callback_data="PO:" + key)]
+
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)

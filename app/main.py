@@ -85,7 +85,7 @@ def button(update) -> None:
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup
-        , chat_id = update.callback_query.message.chat.id)
+        , chat_id = update.callback_query.message.chat.id, message_id = update.callback_query.message.message_id)
 
 
 @app.get('/set_webhook')

@@ -1,28 +1,45 @@
+"""
+    Try to provide services for every client with the same file. Maybe isolate based on 
+    token value. 
+
+    Graph services are all same using the same client variable.
+
+"""
+
+from pydoc import describe
 from uuid import uuid4
 
 from fastapi import FastAPI
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Invoice, LabeledPrice
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import telegram
 from app.core.config import settings
+from app.core.graphdb import graph
 
 app = FastAPI()
-bot = telegram.Bot(token="5037044076:AAEc8BFWgcVDZa5pRFLaTt1FkN89xnnmsDg")
+bot = telegram.Bot(token=settings.TGM_TOKEN)
 
 products_map = {"1": 'Single plate idlis (set of 5pcs)', "2": 'Family pack (set of 25pcs)'}
 chat_data = {}
 
-@app.post(f"/{settings.TOKEN}")
-def respond(payload: dict) -> None:
-    update = telegram.Update.de_json(payload, bot)
+# @app.get('/set_webhook', describe='A general API that can be called for onboarding new'+
+# 'service providers')
+# def set_webhook():
+#     s = bot.setWebhook('{URL}{HOOK}'.format(URL=settings.HEROKU_URL, HOOK=settings.TGM_TOKEN))
+#     if not s:
+#         return "webhook setup failed"
+#     else:
+#         return "webhook setup ok"
 
+@app.post(f"/{settings.UNIQUE_STRING}")
+def place_order(payload: dict) -> None:
+    print(payload)
+    update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
     if query is not None:
         button(update)
     else:
-        print("UPDATE===========================", update)
         chat_id = update.message.chat.id
         msg_id = update.message.message_id
-        print("Chat id: ", chat_id, " Message id: ", msg_id)
         if str(update.message.chat_id) in chat_data.keys():
             if (update.message.text == 'order'):
                 start(update, chat_data)
@@ -63,6 +80,7 @@ def button(update) -> None:
                                      "follow the link below to complete the payment." ,chat_id=update.callback_query.message.chat.id,
                               message_id=update.callback_query.message.message_id
                               )
+        #Create an entry in the database.
 
     else:
         chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0]] = not \
@@ -85,13 +103,5 @@ def button(update) -> None:
         bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup
         , chat_id = update.callback_query.message.chat.id, message_id = update.callback_query.message.message_id)
 
-
-@app.get('/set_webhook')
-def set_webhook():
-    s = bot.setWebhook('{URL}{HOOK}'.format(URL=settings.URL, HOOK=settings.TOKEN))
-    if not s:
-        return "webhook setup failed"
-    else:
-        return "webhook setup ok"
 
 

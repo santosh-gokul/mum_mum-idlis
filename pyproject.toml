@@ -6,13 +6,15 @@ authors = ["N Santosh Gokul  <n.santoshgokul@gmail.com>"]
 license = "GNU"
 
 [tool.poetry.dependencies]
-python = "3.8.12"
+python = "3.9.10"
 fastapi = "^0.67.0"
 black = "^21.7b0"
 pydantic = "^1.8.2"
 python-env = "^1.0.0"
 uvicorn = "^0.14.0"
 python-telegram-bot = "^13.9"
+neo4j = "^4.4.2"
+py2neo = "^2021.2.3"
 
 
 [tool.poetry.dev-dependencies]

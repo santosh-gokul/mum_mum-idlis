@@ -16,7 +16,7 @@ from app.core.config import settings
 from app.core.graphdb import graph
 
 app = FastAPI()
-bot = telegram.Bot(token=settings.TGM_TOKEN)
+bot = telegram.Bot(token=settings.UNIQUE_STRING)
 
 products_map = {"1": 'Single plate idlis (set of 5pcs)', "2": 'Family pack (set of 25pcs)'}
 chat_data = {}

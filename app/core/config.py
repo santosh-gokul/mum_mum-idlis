@@ -3,7 +3,7 @@ import os
 
 class Settings(BaseSettings):
     HEROKU_URL: str = os.environ["HEROKU_URL"]
-    TGM_TOKEN: str = os.environ["TGM_TOKEN"]
+    UNIQUE_STRING: str = os.environ["UNIQUE_STRING"]
     NEO4J_URI: str = os.environ["NEO4J_URI"]
     NEO4J_PASS: str = os.environ["NEO4J_PASS"]
     NEO4J_UNAME: str = os.environ["NEO4J_UNAME"]

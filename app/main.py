@@ -35,22 +35,22 @@ def place_order(token: str = Path(...), payload: dict=None) -> None:
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
     if query is not None:
-        button(update)
+        button(bot, update)
     else:
         chat_id = update.message.chat.id
         msg_id = update.message.message_id
         if str(update.message.chat_id) in chat_data.keys():
             if (update.message.text == 'order'):
-                start(update, chat_data)
+                start(bot, update, chat_data)
             else:
                 pass
         elif (update.message.text == 'order'):
-            start(update, chat_data)
+            start(bot, update, chat_data)
         else:
             bot.send_message(update.message.chat_id, text="Sorry, I don't understand!")
 
 
-def start(update,chat_data) -> None:
+def start(bot, update,chat_data) -> None:
     """Sends a message with three inline buttons attached."""
     key = str(uuid4())
     keyboard = [
@@ -69,7 +69,7 @@ def start(update,chat_data) -> None:
                     chat_id=update.message.chat_id)
 
 
-def button(update) -> None:
+def button(bot, update) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
 

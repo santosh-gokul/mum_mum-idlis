@@ -9,7 +9,7 @@
 from pydoc import describe
 from uuid import uuid4
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import telegram
 from app.core.config import settings
@@ -23,15 +23,16 @@ chat_data = {}
 @app.get('/set_webhook') #'A general API that can be called for onboarding new service providers'
 def set_webhook(bot_token: str):
     bot = telegram.Bot(token=bot_token)
-    s = bot.setWebhook('{URL}{HOOK}'.format(URL=settings.HEROKU_URL, HOOK=settings.UNIQUE_STRING))
+    s = bot.setWebhook('{URL}{HOOK}/{TOKEN}'.format(URL=settings.HEROKU_URL, HOOK=settings.UNIQUE_STRING, TOKEN=bot_token))
     if not s:
         return "webhook setup failed"
     else:
         return "webhook setup ok"
 
-@app.post(f"/{settings.UNIQUE_STRING}")
-def place_order(payload: dict) -> None:
+@app.post(f"/{settings.UNIQUE_STRING}/{token}")
+def place_order(token: Path(...), payload: dict) -> None:
     print(payload)
+    print("token", token)
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
     if query is not None:
@@ -101,6 +102,8 @@ def button(update) -> None:
 
         bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup
         , chat_id = update.callback_query.message.chat.id, message_id = update.callback_query.message.message_id)
+
+
 
 
 

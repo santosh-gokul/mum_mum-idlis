@@ -29,7 +29,7 @@ def set_webhook(bot_token: str):
     else:
         return "webhook setup ok"
 
-@app.post(f"/{settings.UNIQUE_STRING}/{token}")
+@app.post(f"/{settings.UNIQUE_STRING}/"+"{token}")
 def place_order(token: str = Path(...), payload: dict=None) -> None:
     print(payload)
     print("token", token)

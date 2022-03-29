@@ -31,8 +31,7 @@ def set_webhook(bot_token: str):
 
 @app.post(f"/{settings.UNIQUE_STRING}/"+"{token}")
 def place_order(token: str = Path(...), payload: dict=None) -> None:
-    print(payload)
-    print("token", token)
+    bot = telegram.Bot(token=token)
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
     if query is not None:

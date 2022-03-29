@@ -20,8 +20,7 @@ app = FastAPI()
 products_map = {"1": 'Single plate idlis (set of 5pcs)', "2": 'Family pack (set of 25pcs)'}
 chat_data = {}
 
-@app.get('/set_webhook', describe='A general API that can be called for onboarding new'+
-'service providers')
+@app.get('/set_webhook') #'A general API that can be called for onboarding new service providers'
 def set_webhook(bot_token: str):
     bot = telegram.Bot(token=bot_token)
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=settings.HEROKU_URL, HOOK=settings.UNIQUE_STRING))

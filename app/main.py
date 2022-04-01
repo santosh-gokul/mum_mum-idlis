@@ -97,7 +97,7 @@ def button(bot, update) -> None:
         ]
 
 
-        reply_markup = InlineKeyboardMarkup(keyboard)
+        reply_markup = InlineKeyboardMarkup(keyboard, resize_keyboard=True)
 
         bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup
         , chat_id = update.callback_query.message.chat.id, message_id = update.callback_query.message.message_id)

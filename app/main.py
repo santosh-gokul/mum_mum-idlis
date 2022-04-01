@@ -88,7 +88,7 @@ def button(bot, update) -> None:
         keyboard = [
 
                 [InlineKeyboardButton("-", callback_data="-1:" + query.data.split(':')[1]),InlineKeyboardButton(products_map["1"] + (
-                    chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"]),
+                    str(chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"])),
                                      callback_data="1:" + query.data.split(':')[1])],
                 [InlineKeyboardButton(products_map["2"] + (
                     "🟢" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["2"] else ""),

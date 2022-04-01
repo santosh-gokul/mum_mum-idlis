@@ -55,7 +55,7 @@ def start(bot, update,chat_data) -> None:
     key = str(uuid4())
     keyboard = [
 
-            [InlineKeyboardButton("Single plate idlis (set of 5pcs)", callback_data="1:" + key)],
+            [InlineKeyboardButton("-", callback_data="1:" + key),InlineKeyboardButton("Single plate idlis (set of 5pcs)", callback_data="1:" + key)],
             [InlineKeyboardButton("Family pack (set of 25pcs)", callback_data="2:" + key)],
             [InlineKeyboardButton("Place order.", callback_data="PO:" + key)]
 
@@ -64,7 +64,7 @@ def start(bot, update,chat_data) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     chat_data[update.message.chat_id] = {}
-    chat_data[update.message.chat_id][key] = {"1": False, "2": False}
+    chat_data[update.message.chat_id][key] = {"1": 0, "2": 0}
     bot.sendMessage(text='Hey!, What would you like to order?:', reply_markup=reply_markup,
                     chat_id=update.message.chat_id)
 
@@ -82,13 +82,13 @@ def button(bot, update) -> None:
         #Create an entry in the database.
 
     else:
-        chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0]] = not \
-            chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0]]
+        chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][:-1]] = (-1)**(1+len(query.data.split(':')[0]))+\
+            chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][:-1]]
 
         keyboard = [
 
-                [InlineKeyboardButton(products_map["1"] + (
-                    "🟢️" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"] else ""),
+                [InlineKeyboardButton("-", callback_data="-1:" + query.data.split(':')[1]),InlineKeyboardButton(products_map["1"] + (
+                    chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"]),
                                      callback_data="1:" + query.data.split(':')[1])],
                 [InlineKeyboardButton(products_map["2"] + (
                     "🟢" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["2"] else ""),

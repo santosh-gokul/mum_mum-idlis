@@ -82,8 +82,8 @@ def button(bot, update) -> None:
         #Create an entry in the database.
 
     else:
-        chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][:-1]] = (-1)**(1+len(query.data.split(':')[0]))+\
-            chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][:-1]]
+        chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][-1:]] = (-1)**(1+len(query.data.split(':')[0]))+\
+            chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][-1:]]
 
         keyboard = [
 

@@ -35,10 +35,8 @@ def place_order(token: str = Path(...), payload: dict=None) -> None:
     graph_driver = graph.session() #You could move it as a dependancy injection.
 
     bot = telegram.Bot(token=token)
-    sp_info = graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP')
-    print(list(sp_info)[0])
-
-    sp_info = list(sp_info)[0].properties
+    sp_info = list(graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP'))[0]['SP']
+    print(sp_info)
 
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query

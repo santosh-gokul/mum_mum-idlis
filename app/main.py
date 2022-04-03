@@ -36,8 +36,10 @@ def place_order(token: str = Path(...), payload: dict=None) -> None:
 
     bot = telegram.Bot(token=token)
     sp_info = graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP')
-    print(sp_info)
-    
+    print(list(sp_info))
+
+    sp_info = len(sp_info)
+
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
 

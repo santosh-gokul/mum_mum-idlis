@@ -8,11 +8,11 @@
 
 from uuid import uuid4
 
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Depends
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import telegram
 from app.core.config import settings
-from app.core.graphdb import graph
+from app.core.graphdb import get_session
 from app.core.constants import RESERVED_COMMANDS
 from app.utilities.bot_handler import resolve_query
 
@@ -31,9 +31,7 @@ def set_webhook(bot_token: str):
         return "webhook setup ok"
 
 @app.post(f"/{settings.UNIQUE_STRING}/"+"{token}")
-def place_order(token: str = Path(...), payload: dict=None) -> None:
-    graph_driver = graph.session() #You could move it as a dependancy injection.
-
+def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depends(get_session)) -> None:
     bot = telegram.Bot(token=token)
     sp_info = list(graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP'))[0]['SP']
     print(sp_info)
@@ -41,8 +39,8 @@ def place_order(token: str = Path(...), payload: dict=None) -> None:
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
 
-    if update.message.text in RESERVED_COMMANDS:
-        return_text = resolve_query(update.message.text, sp_info['name'])
+    if str(update.message.text).lower() in RESERVED_COMMANDS:
+        return_text = resolve_query(str(update.message.text).lower(), sp_info['name'])
         bot.send_message(update.message.chat_id, text=return_text)
     elif query is not None:
         button(bot, update)

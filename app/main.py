@@ -6,7 +6,6 @@
 
 """
 
-from pydoc import describe
 from uuid import uuid4
 
 from fastapi import FastAPI, Path
@@ -14,6 +13,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 import telegram
 from app.core.config import settings
 from app.core.graphdb import graph
+from app.core.constants import RESERVED_COMMANDS
+from app.utilities.bot_handler import resolve_query
 
 app = FastAPI()
 
@@ -31,9 +32,17 @@ def set_webhook(bot_token: str):
 
 @app.post(f"/{settings.UNIQUE_STRING}/"+"{token}")
 def place_order(token: str = Path(...), payload: dict=None) -> None:
+    graph_driver = graph.session() #You could move it as a dependancy injection.
+
     bot = telegram.Bot(token=token)
+    sp_info = graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP')
+    print(sp_info)
+    
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
+
+    if update.message.text in RESERVED_COMMANDS:
+        resolve_query(update.message.text, sp_info['name'])
     if query is not None:
         button(bot, update)
     else:

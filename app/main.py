@@ -42,8 +42,9 @@ def place_order(token: str = Path(...), payload: dict=None) -> None:
     query = update.callback_query
 
     if update.message.text in RESERVED_COMMANDS:
-        resolve_query(update.message.text, sp_info['name'])
-    if query is not None:
+        return_text = resolve_query(update.message.text, sp_info['name'])
+        bot.send_message(update.message.chat_id, text=return_text)
+    elif query is not None:
         button(bot, update)
     else:
         chat_id = update.message.chat.id

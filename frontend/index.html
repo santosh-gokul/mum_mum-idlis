@@ -314,7 +314,6 @@ $(document).on('click', 'input', function(e){
         max_pg_seen = Math.max(current_page, max_pg_seen);
     }
 
-    alert(idClicked)
     if(idClicked.split('_')[0]==='inc'){
         console.log("Hii")
         item_counter[current_page+"_"+idClicked.split('_')[1]] = parseInt(item_counter[current_page+"_"+idClicked.split('_')[1]])+1;

@@ -15,6 +15,7 @@ uvicorn = "^0.14.0"
 python-telegram-bot = "^13.9"
 neo4j = "^4.4.2"
 py2neo = "^2021.2.3"
+aiofiles = "^0.8.0"
 
 
 [tool.poetry.dev-dependencies]

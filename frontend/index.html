@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" class="noscrollbar">
+
+<head>
+        <title>Order 📦 Now!</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <script src="https://kit.fontawesome.com/92ab13fe6a.js" crossorigin="anonymous"></script>
+        <link href="http://fonts.cdnfonts.com/css/gilroy-bold" rel="stylesheet">
+                
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <style>
+            body {
+            background-image: url(file:///Users/santosh/mum_mum-idlis/frontend/Mediamodifier-Design.svg);
+            background-attachment: scroll; 
+            background-repeat: no-repeat;;
+            }
+
+            br {
+                line-height: 950%;
+            }
+
+            .title{
+                margin-left: 5vmin;
+                text-align: center;
+                font-family: 'Gilroy', sans-serif;
+                font-size: 10vmin;
+                line-height: 40%;
+                font-weight: 500;
+                color:  #ffefc0;
+                
+            }
+
+            .sp_name{
+                
+                font-family: 'Gilroy', sans-serif;
+                font-size: 5vmin;
+                line-height: 40%;
+                font-weight: 200;
+                color:  #000000;
+            }
+
+            .items{
+                font-family: 'Gilroy', sans-serif;
+                font-size: 2vmin;
+                line-height: 100%;
+                font-weight: 50;
+                color:  #000000;
+            }
+
+            .title1{
+                margin-left: 5vmin;
+                padding-right: 10vmin;
+                font-family: 'Gilroy', sans-serif;
+                font-size: 10vmin;
+                line-height: 30%;
+                font-weight: 300;
+                color:  #ffefc0;
+            }
+
+            .row_out{
+                margin-top: 20vmin;
+            }
+
+            .row_menu{
+                margin-top: 5vmin;
+            }
+
+            .icon{
+                border: #000000; border-radius: 50%; border: 2px solid green;
+                height: 20px;
+                width: 20px;
+            }
+
+            
+        </style>
+
+</head>
+
+<body class="">
+
+<div class="container-fluid no-padding">
+    <div class="row justify-content-between row_out">
+        <div class="col-lg-6">
+            <span class="title">Order</span><br>
+            <span class="title1">📦 Now! </span>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="container-fluid no-padding">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <span class = "sp_name">MumMum Idlis</span>
+                </div>
+
+            </div>
+            <div class="row justify-content-between">
+                <div class="col-sm-1 align-self-center"> 
+                    <div> <input type="image" src="../frontend/chevron-left-solid.svg" class="icon" id="go-left"/></div> 
+                </div>
+            
+                <div class="col-lg-6"> 
+                    <div class="container-fluid no-padding" id="menu">
+                       
+                    </div>
+                </div>
+
+                <div class="col-sm-1 align-self-center"> 
+                    <div> <input type="image" src="../frontend/chevron-right-solid.svg" class="icon" id="go-right"/></div> 
+                </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12"  style="text-align: center; padding-top: 5vmin;">
+                <button type="button" class="btn btn-primary btn-lg">Place Order!</button>
+            </div>
+
+        </div>
+        </div>
+      </div>
+</div>
+
+</body>
+<script>
+
+var apiEndpoint = "https://"
+var urlParams;
+(window.onpopstate = function () {
+    var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+        query  = window.location.search.substring(1);
+  
+    urlParams = {};
+    while (match = search.exec(query))
+       urlParams[decode(match[1])] = decode(match[2]);
+})();
+//Move to dynamic tag creation.
+
+var dataFromApi = ["Chicken Biriyani", "Mutton Biriyani", "Egg Biriyani", "Mushroom Biriyani",
+"Pakoda Biriyani", "Soya Biriyani"]; // Currently mocked, replace with api call.
+
+var current_page = 0;
+var item_counter = {};
+var item_name = {};
+var max_pg_seen = 0;
+for(var i=1;i<=Math.min(4, dataFromApi.length);i+=1){
+    var rowElement = document.createElement("div");
+    rowElement.className = "row row_menu";
+    rowElement.id = "row_"+i;
+
+    var element1 = document.createElement("div");
+    element1.className="col-lg-8 items";
+    element1.id="item-"+i;
+    rowElement.appendChild(element1);
+
+
+    var element2 = document.createElement("div");
+    element2.className="col-lg-4 items";
+    var input1 = document.createElement("input");
+    var span = document.createElement("span");
+    var input2 = document.createElement("input");
+
+    input1.type = "image";
+    input1.className="icon";
+    input1.src="../frontend/minus-solid.svg";
+    input1.id="dec_"+i;
+    input2.type = "image";
+    input2.className="icon";
+    input2.src="../frontend/plus-solid.svg"
+    input2.id="inc_"+i;
+
+    span.id="qty_"+i;
+    span.style="padding-left: 0.5vmin; padding-right: 0.5vmin"
+
+    element2.appendChild(input1);
+    element2.appendChild(span);
+    element2.appendChild(input2);
+
+    rowElement.appendChild(element2);
+
+    document.getElementById("menu").appendChild(rowElement);
+
+
+    $('#item-'+i).text(dataFromApi[i-1]);
+    $('#qty_'+i).text(0);
+    item_name[current_page+"_"+i] =  $('#item-'+i).text();
+    item_counter[current_page+"_"+i] = 0;
+}
+var page_states = {}
+
+$(document).on('click', 'input', function(e){
+    var idClicked = e.target.id;
+    if(idClicked==='go-left' && current_page>0){
+        current_page -=1;
+        childElementCount = document.getElementById("menu").childElementCount;
+        requiredElement = Math.min(4, dataFromApi.slice(current_page*4).length);
+        console.log(requiredElement, childElementCount)
+        if (requiredElement>childElementCount){
+            for(var i=childElementCount+1; i<=4; i+=1){
+                var rowElement = document.createElement("div");
+                rowElement.className = "row row_menu";
+                rowElement.id = "row_"+i;
+
+                var element1 = document.createElement("div");
+                element1.className="col-lg-8 items";
+                element1.id="item-"+i;
+                rowElement.appendChild(element1);
+
+
+                var element2 = document.createElement("div");
+                element2.className="col-lg-4 items";
+                var input1 = document.createElement("input");
+                var span = document.createElement("span");
+                var input2 = document.createElement("input");
+
+                input1.type = "image";
+                input1.className="icon";
+                input1.src="../frontend/minus-solid.svg";
+                input1.id="dec_"+i;
+                input2.type = "image";
+                input2.className="icon";
+                input2.src="../frontend/plus-solid.svg"
+                input2.id="inc_"+i;
+
+                span.id="qty_"+i;
+                span.style="padding-left: 0.5vmin; padding-right: 0.5vmin"
+
+                element2.appendChild(input1);
+                element2.appendChild(span);
+                element2.appendChild(input2);
+
+                rowElement.appendChild(element2);
+
+                document.getElementById("menu").appendChild(rowElement);
+            }
+        
+        }
+        for(var i=1;i<=4;i+=1){
+            $('#item-'+i).text(item_name[current_page+"_"+i]);
+            $('#qty_'+i).text(item_counter[current_page+"_"+i]);
+        }
+    }
+    if(idClicked==='go-right' && current_page+1<Math.round(dataFromApi.length)/4){
+        current_page+=1;
+        childElementCount = document.getElementById("menu").childElementCount;
+        requiredElement = Math.min(4, dataFromApi.slice(current_page*4).length);
+        console.log(requiredElement, childElementCount)
+
+        if (requiredElement>childElementCount){
+            for(var i=childElementCount+1; i<=4; i+=1){
+                var rowElement = document.createElement("div");         
+                rowElement.className = "row row_menu";
+                rowElement.id = "row_"+i;
+
+                var element1 = document.createElement("div");
+                element1.className="col-lg-8 items";
+                element1.id="item-"+i;
+                rowElement.appendChild(element1);
+
+
+                var element2 = document.createElement("div");
+                element2.className="col-lg-4 items";
+                var input1 = document.createElement("input");
+                var span = document.createElement("span");
+                var input2 = document.createElement("input");
+
+                input1.type = "image";
+                input1.className="icon";
+                input1.src="../frontend/minus-solid.svg";
+                input1.id="dec_"+i;
+                input2.type = "image";
+                input2.className="icon";
+                input2.src="../frontend/plus-solid.svg"
+                input2.id="inc_"+i;
+
+                span.id="qty_"+i;
+                span.style="padding-left: 0.5vmin; padding-right: 0.5vmin"
+
+                element2.appendChild(input1);
+                element2.appendChild(span);
+                element2.appendChild(input2);
+
+                rowElement.appendChild(element2);
+
+                document.getElementById("menu").appendChild(rowElement);
+                }
+        }
+        if(childElementCount>requiredElement){
+            for(var i=4; i>requiredElement; i-=1){
+                document.getElementById("row_"+i).remove();
+            }
+        }
+        for(var i=1;i<=requiredElement;i+=1){
+            if(max_pg_seen>=current_page){
+                $('#item-'+i).text(item_name[current_page+"_"+i]);
+                $('#qty_'+i).text(item_counter[current_page+"_"+i]);
+            }
+            else{
+                $('#item-'+i).text(dataFromApi[current_page*4+i-1]);
+                $('#qty_'+i).text(0);
+                item_name[current_page+"_"+i] =  $('#item-'+i).text();
+                item_counter[current_page+"_"+i] = $('#qty_'+i).text();
+            }
+        }
+        max_pg_seen = Math.max(current_page, max_pg_seen);
+    }
+
+    alert(idClicked)
+    if(idClicked.split('_')[0]==='inc'){
+        console.log("Hii")
+        item_counter[current_page+"_"+idClicked.split('_')[1]] = parseInt(item_counter[current_page+"_"+idClicked.split('_')[1]])+1;
+        $('#qty_'+idClicked.split('_')[1]).text(item_counter[current_page+"_"+idClicked.split('_')[1]]);
+        console.log(item_counter[current_page+"_"+idClicked.split('_')[1]])
+
+    }
+    if(idClicked.split('_')[0]==='dec'){
+        item_counter[current_page+"_"+idClicked.split('_')[1]] = parseInt(item_counter[current_page+"_"+idClicked.split('_')[1]])-1;
+        item_counter[current_page+"_"+idClicked.split('_')[1]] = Math.max(item_counter[current_page+"_"+idClicked.split('_')[1]],0);
+        $('#qty_'+idClicked.split('_')[1]).text(item_counter[current_page+"_"+idClicked.split('_')[1]]);
+    }
+        
+});
+
+
+</script>
+</html>

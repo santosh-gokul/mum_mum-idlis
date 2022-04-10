@@ -34,25 +34,24 @@ def set_webhook(bot_token: str):
 def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depends(get_session)) -> None:
     bot = telegram.Bot(token=token)
     sp_info = list(graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP'))[0]['SP']
-    print(sp_info)
 
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
 
-    if str(update.message.text).lower() in RESERVED_COMMANDS:
+    if query is not None:
+        button(bot, update)
+
+    elif str(update.message.text).lower() in RESERVED_COMMANDS:
         return_text = resolve_query(str(update.message.text).lower(), sp_info['name'])
         bot.send_message(update.message.chat_id, text=return_text)
-    elif query is not None:
-        button(bot, update)
+
     else:
-        chat_id = update.message.chat.id
-        msg_id = update.message.message_id
         if str(update.message.chat_id) in chat_data.keys():
-            if (update.message.text == 'order'):
+            if (str(update.message.text).lower() == 'order'):
                 start(bot, update, chat_data)
             else:
                 pass
-        elif (update.message.text == 'order'):
+        elif (str(update.message.text).lower() == 'order'):
             start(bot, update, chat_data)
         else:
             bot.send_message(update.message.chat_id, text="Sorry, I don't understand!")
@@ -60,6 +59,11 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
 
 def start(bot, update,chat_data) -> None:
     """Sends a message with three inline buttons attached."""
+
+    """
+        Thinking of developing 'host-my-menu' as a service, and it can called here.
+
+    """
     key = str(uuid4())
     keyboard = [
 

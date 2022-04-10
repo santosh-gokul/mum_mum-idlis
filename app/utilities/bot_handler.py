@@ -10,7 +10,7 @@ few commands that you can ask me to perform.
 2: history: Shows history of purchases made by you.
 3: help: To display the commands above, in case you forget'em.
 
-Unfortunately, I don't any other commands as of now!
+Unfortunately, I don't understand any other commands as of now!
 """
 
     if command == 'help':
@@ -24,5 +24,5 @@ few commands that you can ask me to perform.
 2: history: Shows history of purchases made by you.
 3: help: To display the commands above, in case you forget'em.
 
-Unfortunately, I don't any other commands as of now!
+Unfortunately, I don't understand any other commands as of now!
 """

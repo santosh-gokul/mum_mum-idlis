@@ -10,6 +10,7 @@ from http.client import HTTPResponse
 from uuid import uuid4
 
 from fastapi import FastAPI, Path, Depends, Request
+from fastapi.staticfiles import StaticFiles
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import telegram
 from app.core.config import settings

@@ -25,7 +25,7 @@ chat_data = {}
 
 app.mount("/ui/", StaticFiles(directory="frontend/"), name="static")
 
-@app.get("/", response_class=HTTPResponse)
+@app.get("/place_order", response_class=HTTPResponse)
 async def main(request: Request):
     print(f"Hello from - {request.headers}")
     with open('frontend/index.html') as f:

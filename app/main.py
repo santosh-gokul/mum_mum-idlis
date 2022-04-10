@@ -22,6 +22,8 @@ app = FastAPI()
 products_map = {"1": 'Single plate idlis (set of 5pcs)', "2": 'Family pack (set of 25pcs)'}
 chat_data = {}
 
+app.mount("/ui/", StaticFiles(directory="frontend/"), name="static")
+
 @app.get("/", response_class=HTTPResponse)
 async def main(request: Request):
     print(f"Hello from - {request.headers}")

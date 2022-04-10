@@ -6,9 +6,10 @@
 
 """
 
+from http.client import HTTPResponse
 from uuid import uuid4
 
-from fastapi import FastAPI, Path, Depends
+from fastapi import FastAPI, Path, Depends, Request
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import telegram
 from app.core.config import settings
@@ -20,6 +21,13 @@ app = FastAPI()
 
 products_map = {"1": 'Single plate idlis (set of 5pcs)', "2": 'Family pack (set of 25pcs)'}
 chat_data = {}
+
+@app.get("/", response_class=HTTPResponse)
+async def main(request: Request):
+    print(f"Hello from - {request.headers}")
+    with open('frontend/index.html') as f:
+        data = f.read()
+    return data
 
 @app.get('/set_webhook') #'A general API that can be called for onboarding new service providers'
 def set_webhook(bot_token: str):
@@ -64,6 +72,7 @@ def start(bot, update,chat_data) -> None:
         Thinking of developing 'host-my-menu' as a service, and it can called here.
 
     """
+
     key = str(uuid4())
     keyboard = [
 

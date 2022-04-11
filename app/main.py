@@ -55,7 +55,7 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
             else:
                 pass
         elif (str(update.message.text).lower() == 'order'):
-            start(bot, update, chat_data)
+            start(bot, update, chat_data, sp_info)
         else:
             bot.send_message(update.message.chat_id, text="Sorry, I don't understand!")
 

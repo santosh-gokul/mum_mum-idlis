@@ -78,8 +78,7 @@ def start(bot, update,chat_data, sp_info) -> None:
         "token_id": 1 #Need to maintain a db for token related info
     }
     encoded_jwt = jwt.encode(jwt_payload, settings.SECRET, algorithm="HS256")
-    bot.sendMessage(text=f'Please follow this link to place the order\n{settings.HEROKU_URL}\
-    /frontend/index.html?identifier={encoded_jwt}',
+    bot.sendMessage(text=f'Please follow this link to place the order\n{settings.HEROKU_URL}frontend/index.html?identifier={encoded_jwt}',
                     chat_id=update.message.chat_id)
 
 def button(bot, update) -> None:

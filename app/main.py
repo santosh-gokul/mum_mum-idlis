@@ -13,14 +13,13 @@ from fastapi import FastAPI, Path, Depends, Request
 from fastapi.staticfiles import StaticFiles
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import telegram
+import jwt
 from app.core.config import settings
 from app.core.graphdb import get_session
 from app.core.constants import RESERVED_COMMANDS
 from app.utilities.bot_handler import resolve_query
 
 app = FastAPI()
-
-products_map = {"1": 'Single plate idlis (set of 5pcs)', "2": 'Family pack (set of 25pcs)'}
 chat_data = {}
 
 app.mount("/frontend/", StaticFiles(directory="frontend/"), name="static")
@@ -52,7 +51,7 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
     else:
         if str(update.message.chat_id) in chat_data.keys():
             if (str(update.message.text).lower() == 'order'):
-                start(bot, update, chat_data)
+                start(bot, update, chat_data, sp_info)
             else:
                 pass
         elif (str(update.message.text).lower() == 'order'):
@@ -61,30 +60,27 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
             bot.send_message(update.message.chat_id, text="Sorry, I don't understand!")
 
 
-def start(bot, update,chat_data) -> None:
+def start(bot, update,chat_data, sp_info) -> None:
     """Sends a message with three inline buttons attached."""
 
     """
         Thinking of developing 'host-my-menu' as a service, and it can called here.
 
+        Create a JWT, with following properties:
+            1: chat_id: Need this to send message back to the user.
+            2: sp_id: Do not user token-id
+            2: token_id: incremental. at any time, just a single token must be active.
     """
 
-    key = str(uuid4())
-    keyboard = [
-
-            [InlineKeyboardButton("-", callback_data="1:" + key),InlineKeyboardButton("Single plate idlis (set of 5pcs)", callback_data="1:" + key)],
-            [InlineKeyboardButton("Family pack (set of 25pcs)", callback_data="2:" + key)],
-            [InlineKeyboardButton("Place order.", callback_data="PO:" + key)]
-
-    ]
-
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
-    chat_data[update.message.chat_id] = {}
-    chat_data[update.message.chat_id][key] = {"1": 0, "2": 0}
-    bot.sendMessage(text='Hey!, What would you like to order?:', reply_markup=reply_markup,
+    jwt_payload = {
+        "chat_id": update.message.chat_id,
+        "sp_id": sp_info["seller_id"],
+        "token_id": 1 #Need to maintain a db for token related info
+    }
+    encoded_jwt = jwt.encode(jwt_payload, settings.SECRET, algorithm="HS256")
+    bot.sendMessage(text=f'Please follow this link to place the order\n{settings.HEROKU_URL}\
+    /frontend/index.html?identifier={encoded_jwt}',
                     chat_id=update.message.chat_id)
-
 
 def button(bot, update) -> None:
     """Parses the CallbackQuery and updates the message text."""

@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     NEO4J_UNAME: str = os.environ["NEO4J_UNAME"]
     HOST: str = os.environ["HOST"]
     PORT: int = os.environ["PORT"]
+    SECRET: int = os.environ["SECRET"]
 
     class Config:
         env_file = '/Users/santosh/mum_mum-idlis/.env'

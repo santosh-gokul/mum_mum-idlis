@@ -36,6 +36,10 @@ def set_webhook(bot_token: str):
 @app.post(f"/{settings.UNIQUE_STRING}/"+"{token}")
 def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depends(get_session)) -> None:
     bot = telegram.Bot(token=token)
+    update = telegram.Update.de_json(payload, bot)
+    query = update.callback_query
+    print("UPDATE", update)
+
     sp_info = list(graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP'))[0]['SP']
     client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id="{update.message.chat_id}" \
     RETURN C'))
@@ -50,9 +54,6 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
     client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id="{update.message.chat_id}" \
     RETURN C'))[0]['C']
     
-    update = telegram.Update.de_json(payload, bot)
-    query = update.callback_query
-    print("UPDATE", update)
 
     if query is not None:
         button(bot, update)
@@ -93,7 +94,7 @@ def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     query = f"MATCH (C:Client) where C.client_id={update.message.chat_id} \
     SET C.token_count={client_info['token_count']+1}"
     graph_driver.run(query)
-    
+
     encoded_jwt = jwt.encode(jwt_payload, settings.SECRET, algorithm="HS256")
     bot.sendMessage(text=f'Please follow this link to place the order\n{settings.HEROKU_URL}frontend/index.html?identifier={encoded_jwt}',
                     chat_id=update.message.chat_id)

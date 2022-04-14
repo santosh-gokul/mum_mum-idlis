@@ -37,9 +37,9 @@ def set_webhook(bot_token: str):
 def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depends(get_session)) -> None:
     bot = telegram.Bot(token=token)
     sp_info = list(graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP'))[0]['SP']
-
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
+    print("UPDATE", update)
 
     if query is not None:
         button(bot, update)

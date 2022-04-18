@@ -50,7 +50,7 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
     if (len(client_info)==0):
         query = "CREATE (C:Client $props) RETURN C"
         graph_driver.run(query, props={'client_id': update.message.chat_id,
-         'service_provider': sp_info['name'],
+         'service_provider': sp_info['seller_id'],
          'token_count': 0})
 
     client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id={update.message.chat_id} \

@@ -43,6 +43,7 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
     sp_info = list(graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP'))[0]['SP']
     client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id="{update.message.chat_id}" \
     RETURN C'))
+    print(client_info, "CLIENT_INFO", len(client_info))
 
     #Check if the client is already in the database.
     if (len(client_info)==0):

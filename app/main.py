@@ -38,7 +38,7 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
     bot = telegram.Bot(token=token)
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
-    print("UPDATE", update)
+    print("UPDATE", update) 
 
     sp_info = list(graph_driver.run(f'MATCH (SP:ServiceProvider) where SP.token="{token}" RETURN SP'))[0]['SP']
     client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id="{update.message.chat_id}" \

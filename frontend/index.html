@@ -118,7 +118,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12"  style="text-align: center; padding-top: 5vmin;">
-                <button type="button" class="btn btn-primary btn-lg" id = "place-order">Place Order!</button>
+                <button type="button" class="btn btn-primary btn-lg" id="place-order">Place Order!</button>
             </div>
 
         </div>
@@ -244,6 +244,7 @@ function loadFunc() {
 
 $(document).on('click', 'input', function(e){
     var idClicked = e.target.id;
+    alert(idClicked)
     if(idClicked==='place-order'){
         const response = $.ajax({url: apiEndpoint+'place_order/'+urlParams['identifier'],
         method: 'POST',

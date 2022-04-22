@@ -244,6 +244,45 @@ function loadFunc() {
 
 $(document).on('click', 'input', function(e){
     var idClicked = e.target.id;
+    if(idClicked==='place-order'){
+        const response = $.ajax({url: apiEndpoint+'place_order/'+urlParams['identifier'],
+        method: 'POST',
+        data: item_counter,
+        success: function(response){
+            console.log(response)
+            var goLeft = document.getElementById("go-left");
+            goLeft.style.visibility = "hidden";
+
+            var goRight = document.getElementById("go-right");
+            goRight.style.visibility = "hidden";
+
+            var placeOrder = document.getElementById("place-order");
+            placeOrder.style.visibility = "hidden";
+            if(response['success']){
+                var mainTitle = document.getElementById("sp-name");
+                mainTitle.textContent = "Your order is placed!"
+            }
+            else{
+                var mainTitle = document.getElementById("sp-name");
+                mainTitle.textContent = "Somethin's wrong!"
+            }
+        },
+        error: function(){
+            console.log(response)
+            var mainTitle = document.getElementById("sp-name");
+            mainTitle.textContent = "Somethin's wrong!"
+
+            var goLeft = document.getElementById("go-left");
+            goLeft.style.visibility = "hidden";
+
+            var goRight = document.getElementById("go-right");
+            goRight.style.visibility = "hidden";
+
+            var placeOrder = document.getElementById("place-order");
+            placeOrder.style.visibility = "hidden";
+        }
+    })
+    }
     if(idClicked==='go-left' && current_page>0){
         current_page -=1;
         childElementCount = document.getElementById("menu").childElementCount;
@@ -371,6 +410,8 @@ $(document).on('click', 'input', function(e){
         item_counter[current_page+"_"+idClicked.split('_')[1]] = Math.max(item_counter[current_page+"_"+idClicked.split('_')[1]],0);
         $('#qty_'+idClicked.split('_')[1]).text(item_counter[current_page+"_"+idClicked.split('_')[1]]);
     }
+
+
         
 });
 

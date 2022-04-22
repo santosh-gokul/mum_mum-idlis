@@ -10,7 +10,7 @@ import json
 from fastapi.responses import JSONResponse
 from uuid import uuid4
 
-from fastapi import FastAPI, Path, Depends, Request
+from fastapi import Body, FastAPI, Path, Depends, Request
 from fastapi.staticfiles import StaticFiles
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import telegram
@@ -35,7 +35,7 @@ def set_webhook(bot_token: str):
         return "webhook setup ok"
 
 @app.post(f"/{settings.UNIQUE_STRING}/"+"{token}")
-def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depends(get_session)) -> None:
+def enquire_order(token: str = Path(...), payload: dict=None, graph_driver = Depends(get_session)) -> None:
     bot = telegram.Bot(token=token)
     update = telegram.Update.de_json(payload, bot)
     query = update.callback_query
@@ -111,6 +111,13 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
             menu_items.append(item['P']['name'])
     
     return JSONResponse(status_code=200, content={'success': True, 'data': {'store_name':client_info[0]['S']['name'], 'menu_items': menu_items}})
+
+@app.post("/place_order/{token}")
+def place_order(data: Body, token: str, graph_driver = Depends(get_session)):
+    result = validate_token(token=token, graph_driver=graph_driver)
+    if result.status_code!=200:
+       return JSONResponse(status_code=401, content={'success': False})
+    print(data, "DATA")
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

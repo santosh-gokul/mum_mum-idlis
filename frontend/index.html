@@ -84,7 +84,7 @@
 
 </head>
 
-<body class="">
+<body class="" onload="loadFunc()">
 
 <div class="container-fluid no-padding">
     <div class="row justify-content-between row_out">
@@ -131,8 +131,8 @@
 <script>
 
 var apiEndpoint = "https://mum-mum-idilis.herokuapp.com/"
-var urlParams;
-(window.onpopstate = function () {
+function loadFunc() {
+    var urlParams;
     var match,
         pl     = /\+/g,  // Regex for replacing addition symbol with a space
         search = /([^&=]+)=?([^&]*)/g,
@@ -142,10 +142,11 @@ var urlParams;
     urlParams = {};
     while (match = search.exec(query))
        urlParams[decode(match[1])] = decode(match[2]);
-})();
-    const response =  fetch(apiEndpoint+'validate_token/'+urlParams['identifier']);
-    const myJson =  response.json();
-    alert(response)
+    const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'], success: function(){
+           alert("done");
+        }});
+    console.log(response)
+};
 
 //Move to dynamic tag creation.
 

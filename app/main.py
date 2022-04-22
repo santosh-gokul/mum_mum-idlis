@@ -6,7 +6,7 @@
 
 """
 
-from http.client import HTTPResponse
+from fastapi.responses import JSONResponse
 from uuid import uuid4
 
 from fastapi import FastAPI, Path, Depends, Request
@@ -55,7 +55,6 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
 
     client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id={update.message.chat_id} \
     RETURN C'))[0]['C']
-    
 
     if query is not None:
         button(bot, update)
@@ -75,7 +74,21 @@ def place_order(token: str = Path(...), payload: dict=None, graph_driver = Depen
         else:
             bot.send_message(update.message.chat_id, text="Sorry, I don't understand!")
 
-
+@app.get("/validate_token/{token}")
+def validate_token(token: str, graph_driver = Depends(get_session)):
+    """
+        As far as I can comprehend, this prevents any sorts of replay attack becuz of token count
+        check. Also it also prevents MiM tampering attack due to the nature of JWT.
+    """
+    try:
+        decode_data = jwt.decode(token, settings.SECRET, algorithms=["HS256"])
+        client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id={decode_data["chat_id"]} \
+        RETURN C'))[0]['C']
+        if (client_info['token_count'] != decode_data['token_id']-1):
+            return JSONResponse(status_code=401, content={'success': False})
+        return JSONResponse(status_code=200, content={'success': True})
+    except jwt.exceptions.InvalidSignatureError as e:
+        return JSONResponse(status_code=401, content={'success': False})
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

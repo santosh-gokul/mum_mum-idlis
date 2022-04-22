@@ -130,7 +130,7 @@
 </body>
 <script>
 
-var apiEndpoint = "https://"
+var apiEndpoint = "https://mum-mum-idilis.herokuapp.com/"
 var urlParams;
 (window.onpopstate = function () {
     var match,
@@ -143,6 +143,10 @@ var urlParams;
     while (match = search.exec(query))
        urlParams[decode(match[1])] = decode(match[2]);
 })();
+    const response =  fetch(apiEndpoint+'validate_token/'+urlParams['identifier']);
+    const myJson =  response.json();
+    alert(response)
+
 //Move to dynamic tag creation.
 
 var dataFromApi = ["Chicken Biriyani", "Mutton Biriyani", "Egg Biriyani", "Mushroom Biriyani",

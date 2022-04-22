@@ -150,25 +150,7 @@ function loadFunc() {
     var apiResult = false;
     while (match = search.exec(query))
        urlParams[decode(match[1])] = decode(match[2]);
-    const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'], success: function(){
-           apiResult=true;
-        }});
-    console.log(apiResult)
-    if (response.status!=200){
-            console.log(response)
-            var mainTitle = document.getElementById("sp-name");
-            mainTitle.textContent = "Somethin's wrong!"
-
-            var goLeft = document.getElementById("go-left");
-            goLeft.style.visibility = "hidden";
-
-            var goRight = document.getElementById("go-right");
-            goRight.style.visibility = "hidden";
-
-            var placeOrder = document.getElementById("place-order");
-            placeOrder.style.visibility = "hidden";
-    }
-    else{
+    const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'],success: function(){
             var mainTitle = document.getElementById("sp-name");
             mainTitle.textContent = "MumMum Idlis"
 
@@ -227,8 +209,22 @@ function loadFunc() {
             item_name[current_page+"_"+i] =  $('#item-'+i).text();
             item_counter[current_page+"_"+i] = 0;
         }
-    }    
-};
+    }, error : function(){
+            console.log(response)
+            var mainTitle = document.getElementById("sp-name");
+            mainTitle.textContent = "Somethin's wrong!"
+
+            var goLeft = document.getElementById("go-left");
+            goLeft.style.visibility = "hidden";
+
+            var goRight = document.getElementById("go-right");
+            goRight.style.visibility = "hidden";
+
+            var placeOrder = document.getElementById("place-order");
+            placeOrder.style.visibility = "hidden";
+        }
+    });
+}
 
 $(document).on('click', 'input', function(e){
     var idClicked = e.target.id;

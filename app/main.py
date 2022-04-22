@@ -95,10 +95,14 @@ def validate_token(token: str, graph_driver = Depends(get_session)):
 
 @app.get("/populate_menu/{token}")
 def populate_menu(token: str, graph_driver = Depends(get_session)):
-   result = validate_token(token=token, graph_driver=graph_driver) 
-   print(json.loads(result.body))
-   if result.status_code!=200:
+    result = validate_token(token=token, graph_driver=graph_driver)
+    if result.status_code!=200:
        return json.loads(result.body)
+
+    decode_data = jwt.decode(token, settings.SECRET, algorithms=["HS256"])
+    client_info = list(graph_driver.run(f'MATCH p=(S:ServiceProvider)-[R:SELLS]->(P:ProductCatalogue)\
+        where S.seller_id="{decode_data["sp_id"]}" RETURN R'))
+    print(client_info)
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

@@ -113,7 +113,7 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
     return JSONResponse(status_code=200, content={'success': True, 'data': {'store_name':client_info[0]['S']['name'], 'menu_items': menu_items}})
 
 @app.post("/place_order/{token}")
-def place_order(data: Body, token: str, graph_driver = Depends(get_session)):
+def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     result = validate_token(token=token, graph_driver=graph_driver)
     if result.status_code!=200:
        return JSONResponse(status_code=401, content={'success': False})

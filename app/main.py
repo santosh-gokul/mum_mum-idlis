@@ -95,7 +95,7 @@ def validate_token(token: str, graph_driver = Depends(get_session)):
 @app.get("/populate_menu/{token}")
 def populate_menu(token: str, graph_driver = Depends(get_session)):
    result = validate_token(token=token, graph_driver=graph_driver) 
-   print(result)
+   print(result, dir(result))
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

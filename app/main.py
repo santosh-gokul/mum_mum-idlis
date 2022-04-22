@@ -84,7 +84,7 @@ def validate_token(token: str, graph_driver = Depends(get_session)):
         decode_data = jwt.decode(token, settings.SECRET, algorithms=["HS256"])
         client_info = list(graph_driver.run(f'MATCH (C:Client) where C.client_id={decode_data["chat_id"]} \
         RETURN C'))[0]['C']
-        if (client_info['token_count'] != decode_data['token_id']-1):
+        if (int(client_info['token_count']) != int(decode_data['token_id'])-1):
             return JSONResponse(status_code=401, content={'success': False})
         return JSONResponse(status_code=200, content={'success': True})
     except jwt.exceptions.InvalidSignatureError as e:

@@ -150,64 +150,81 @@ function loadFunc() {
     var apiResult = false;
     while (match = search.exec(query))
        urlParams[decode(match[1])] = decode(match[2]);
-    const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'],success: function(){
+    const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'],success: function(response){
+
+            if (response.valid && response['success']){
+                var mainTitle = document.getElementById("sp-name");
+                mainTitle.textContent = "MumMum Idlis"
+
+                var goLeft = document.getElementById("go-left");
+                goLeft.style.visibility = "none";
+
+                var goRight = document.getElementById("go-right");
+                goRight.style.visibility = "none";
+
+                var placeOrder = document.getElementById("place-order");
+                placeOrder.style.visibility = "none";
+
+                dataFromApi = ["Chicken Biriyani", "Mutton Biriyani", "Egg Biriyani", "Mushroom Biriyani",
+                    "Pakoda Biriyani", "Soya Biriyani"]; // Currently mocked, replace with api call.
+
+                for(var i=1;i<=Math.min(4, dataFromApi.length);i+=1){
+                var rowElement = document.createElement("div");
+                rowElement.className = "row row_menu";
+                rowElement.id = "row_"+i;
+
+                var element1 = document.createElement("div");
+                element1.className="col-lg-8 items";
+                element1.id="item-"+i;
+                rowElement.appendChild(element1);
+
+
+                var element2 = document.createElement("div");
+                element2.className="col-lg-4 items";
+                var input1 = document.createElement("input");
+                var span = document.createElement("span");
+                var input2 = document.createElement("input");
+
+                input1.type = "image";
+                input1.className="icon";
+                input1.src="../frontend/minus-solid.svg";
+                input1.id="dec_"+i;
+                input2.type = "image";
+                input2.className="icon";
+                input2.src="../frontend/plus-solid.svg"
+                input2.id="inc_"+i;
+
+                span.id="qty_"+i;
+                span.style="padding-left: 0.5vmin; padding-right: 0.5vmin"
+
+                element2.appendChild(input1);
+                element2.appendChild(span);
+                element2.appendChild(input2);
+
+                rowElement.appendChild(element2);
+
+                document.getElementById("menu").appendChild(rowElement);
+
+
+                $('#item-'+i).text(dataFromApi[i-1]);
+                $('#qty_'+i).text(0);
+                item_name[current_page+"_"+i] =  $('#item-'+i).text();
+                item_counter[current_page+"_"+i] = 0;
+            }
+        }
+        else{
+            console.log(response)
             var mainTitle = document.getElementById("sp-name");
-            mainTitle.textContent = "MumMum Idlis"
+            mainTitle.textContent = "Somethin's wrong!"
 
             var goLeft = document.getElementById("go-left");
-            goLeft.style.visibility = "none";
+            goLeft.style.visibility = "hidden";
 
             var goRight = document.getElementById("go-right");
-            goRight.style.visibility = "none";
+            goRight.style.visibility = "hidden";
 
             var placeOrder = document.getElementById("place-order");
-            placeOrder.style.visibility = "none";
-
-            dataFromApi = ["Chicken Biriyani", "Mutton Biriyani", "Egg Biriyani", "Mushroom Biriyani",
-                "Pakoda Biriyani", "Soya Biriyani"]; // Currently mocked, replace with api call.
-
-            for(var i=1;i<=Math.min(4, dataFromApi.length);i+=1){
-            var rowElement = document.createElement("div");
-            rowElement.className = "row row_menu";
-            rowElement.id = "row_"+i;
-
-            var element1 = document.createElement("div");
-            element1.className="col-lg-8 items";
-            element1.id="item-"+i;
-            rowElement.appendChild(element1);
-
-
-            var element2 = document.createElement("div");
-            element2.className="col-lg-4 items";
-            var input1 = document.createElement("input");
-            var span = document.createElement("span");
-            var input2 = document.createElement("input");
-
-            input1.type = "image";
-            input1.className="icon";
-            input1.src="../frontend/minus-solid.svg";
-            input1.id="dec_"+i;
-            input2.type = "image";
-            input2.className="icon";
-            input2.src="../frontend/plus-solid.svg"
-            input2.id="inc_"+i;
-
-            span.id="qty_"+i;
-            span.style="padding-left: 0.5vmin; padding-right: 0.5vmin"
-
-            element2.appendChild(input1);
-            element2.appendChild(span);
-            element2.appendChild(input2);
-
-            rowElement.appendChild(element2);
-
-            document.getElementById("menu").appendChild(rowElement);
-
-
-            $('#item-'+i).text(dataFromApi[i-1]);
-            $('#qty_'+i).text(0);
-            item_name[current_page+"_"+i] =  $('#item-'+i).text();
-            item_counter[current_page+"_"+i] = 0;
+            placeOrder.style.visibility = "hidden";
         }
     }, error : function(){
             console.log(response)

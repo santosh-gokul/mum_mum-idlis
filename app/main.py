@@ -97,12 +97,11 @@ def validate_token(token: str, graph_driver = Depends(get_session)):
 def populate_menu(token: str, graph_driver = Depends(get_session)):
     result = validate_token(token=token, graph_driver=graph_driver)
     if result.status_code!=200:
-       return json.loads(result.body)
+       return JSONResponse(status_code=401, content={'success': False})
 
     decode_data = jwt.decode(token, settings.SECRET, algorithms=["HS256"])
     client_info = list(graph_driver.run(f'MATCH p=(S:ServiceProvider)-[R:SELLS]->(P:ProductCatalogue)\
         where S.seller_id="{decode_data["sp_id"]}" RETURN R,P'))
-    print(client_info)
     menu_items = []
     for item in client_info:
         for unit in item['R'].get('unit', []):
@@ -110,7 +109,8 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
             menu_items.append(item['P']['name']+f" (Pack of {unit}{metric})")
         if len(item['R'].get('unit', []))==0:
             menu_items.append(item['P']['name'])
-    print(menu_items, "MENU ITEMS")
+    
+    return JSONResponse(status_code=200, content={'success': True, 'data': {'menu_items': menu_items}})
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

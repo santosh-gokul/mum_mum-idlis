@@ -91,6 +91,11 @@ def validate_token(token: str, graph_driver = Depends(get_session)):
         return JSONResponse(status_code=200, content={'success': True})
     except jwt.exceptions.InvalidSignatureError as e:
         return JSONResponse(status_code=401, content={'success': False})
+
+@app.get("/populate_menu/{token}")
+def populate_menu(token: str, graph_driver = Depends(get_session)):
+   result = validate_token(token=token) 
+   print(result)
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

@@ -152,7 +152,7 @@ function loadFunc() {
        urlParams[decode(match[1])] = decode(match[2]);
     const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'],success: function(response){
             console.log(response)
-            if (response.valid && response['success']){
+            if (response['success']){
                 var mainTitle = document.getElementById("sp-name");
                 mainTitle.textContent = "MumMum Idlis"
 

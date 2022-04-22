@@ -244,7 +244,6 @@ function loadFunc() {
 
 $(document).on('click', 'input', 'button',function(e){
     var idClicked = e.target.id;
-    alert(idClicked)
     if(idClicked==='place-order'){
         const response = $.ajax({url: apiEndpoint+'place_order/'+urlParams['identifier'],
         method: 'POST',

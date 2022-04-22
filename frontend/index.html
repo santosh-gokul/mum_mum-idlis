@@ -155,6 +155,7 @@ function loadFunc() {
         }});
     console.log(apiResult)
     if (response.status!=200){
+            console.log(response)
             var mainTitle = document.getElementById("sp-name");
             mainTitle.textContent = "Somethin's wrong!"
 

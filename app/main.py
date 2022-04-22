@@ -105,8 +105,11 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
     print(client_info)
     menu_items = []
     for item in client_info:
-        for unit in item['R']['unit']:
-            menu_items.append(item['P']['name']+f" (Pack of {unit}{item['R']['metric']})")
+        for unit in item['R'].get('unit', []):
+            metric = item['R'].get('metric', '')
+            menu_items.append(item['P']['name']+f" (Pack of {unit}{metric})")
+        if len(item['R'].get('unit', []))==0:
+            menu_items.append(item['P']['name'])
     print(menu_items, "MENU ITEMS")
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""

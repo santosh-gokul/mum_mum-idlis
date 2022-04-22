@@ -153,6 +153,7 @@ function loadFunc() {
     const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'], success: function(){
            apiResult=true;
         }});
+    console.log(apiResult)
     if (!apiResult){
             var mainTitle = document.getElementById("sp-name");
             mainTitle.textContent = "Somethin's wrong!"

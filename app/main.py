@@ -110,7 +110,7 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
         if len(item['R'].get('unit', []))==0:
             menu_items.append(item['P']['name'])
     
-    return JSONResponse(status_code=200, content={'success': True, 'data': {'store_name':client_info['name'], 'menu_items': menu_items}})
+    return JSONResponse(status_code=200, content={'success': True, 'data': {'store_name':client_info[0]['name'], 'menu_items': menu_items}})
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

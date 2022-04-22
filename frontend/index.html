@@ -257,6 +257,10 @@ $(document).on('click', 'input', 'button',function(e){
 
             var placeOrder = document.getElementById("place-order");
             placeOrder.style.visibility = "hidden";
+
+            for(var i=0;i<document.getElementById("menu").childElementCount;i+=1){
+                document.getElementById("row_"+i).remove();
+            }
             if(response['success']){
                 var mainTitle = document.getElementById("sp-name");
                 mainTitle.textContent = "Your order is placed!"

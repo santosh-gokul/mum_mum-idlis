@@ -101,7 +101,7 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
 
     decode_data = jwt.decode(token, settings.SECRET, algorithms=["HS256"])
     client_info = list(graph_driver.run(f'MATCH p=(S:ServiceProvider)-[R:SELLS]->(P:ProductCatalogue)\
-        where S.seller_id="{decode_data["sp_id"]}" RETURN R,P'))
+        where S.seller_id="{decode_data["sp_id"]}" RETURN S,R,P'))
     menu_items = []
     for item in client_info:
         for unit in item['R'].get('unit', []):
@@ -110,7 +110,7 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
         if len(item['R'].get('unit', []))==0:
             menu_items.append(item['P']['name'])
     
-    return JSONResponse(status_code=200, content={'success': True, 'data': {'menu_items': menu_items}})
+    return JSONResponse(status_code=200, content={'success': True, 'data': {'store_name':client_info['name'], 'menu_items': menu_items}})
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 

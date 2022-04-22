@@ -150,11 +150,11 @@ function loadFunc() {
     var apiResult = false;
     while (match = search.exec(query))
        urlParams[decode(match[1])] = decode(match[2]);
-    const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'],success: function(response){
+    const response = $.ajax({url: apiEndpoint+'populate_menu/'+urlParams['identifier'],success: function(response){
             console.log(response)
             if (response['success']){
                 var mainTitle = document.getElementById("sp-name");
-                mainTitle.textContent = "MumMum Idlis"
+                mainTitle.textContent = response['data']['store_name']
 
                 var goLeft = document.getElementById("go-left");
                 goLeft.style.visibility = "none";
@@ -165,8 +165,7 @@ function loadFunc() {
                 var placeOrder = document.getElementById("place-order");
                 placeOrder.style.visibility = "none";
 
-                dataFromApi = ["Chicken Biriyani", "Mutton Biriyani", "Egg Biriyani", "Mushroom Biriyani",
-                    "Pakoda Biriyani", "Soya Biriyani"]; // Currently mocked, replace with api call.
+                dataFromApi = response['data']['menu_items']; // Currently mocked, replace with api call.
 
                 for(var i=1;i<=Math.min(4, dataFromApi.length);i+=1){
                 var rowElement = document.createElement("div");

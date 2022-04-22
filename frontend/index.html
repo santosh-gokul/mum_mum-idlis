@@ -147,12 +147,13 @@ function loadFunc() {
         query  = window.location.search.substring(1);
   
     urlParams = {};
+    var apiResult = false;
     while (match = search.exec(query))
        urlParams[decode(match[1])] = decode(match[2]);
     const response = $.ajax({url: apiEndpoint+'validate_token/'+urlParams['identifier'], success: function(){
-           alert("done");
+           apiResult=true;
         }});
-    if (!response.DONE){
+    if (!apiResult){
             var mainTitle = document.getElementById("sp-name");
             mainTitle.textContent = "Somethin's wrong!"
 

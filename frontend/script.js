@@ -54,11 +54,11 @@ function loadFunc() {
 
                 input1.type = "image";
                 input1.className="icon";
-                input1.src="../frontend/minus-solid.svg";
+                input1.src="../frontend/misc/minus-solid.svg";
                 input1.id="dec_"+i;
                 input2.type = "image";
                 input2.className="icon";
-                input2.src="../frontend/plus-solid.svg"
+                input2.src="../frontend/misc/plus-solid.svg"
                 input2.id="inc_"+i;
 
                 span.id="qty_"+i;
@@ -188,11 +188,11 @@ $(document).on('click', 'input', 'button',function(e){
 
                 input1.type = "image";
                 input1.className="icon";
-                input1.src="../frontend/minus-solid.svg";
+                input1.src="../frontend/misc/minus-solid.svg";
                 input1.id="dec_"+i;
                 input2.type = "image";
                 input2.className="icon";
-                input2.src="../frontend/plus-solid.svg"
+                input2.src="../frontend/misc/plus-solid.svg"
                 input2.id="inc_"+i;
 
                 span.id="qty_"+i;
@@ -239,11 +239,11 @@ $(document).on('click', 'input', 'button',function(e){
 
                 input1.type = "image";
                 input1.className="icon";
-                input1.src="../frontend/minus-solid.svg";
+                input1.src="../frontend/misc/minus-solid.svg";
                 input1.id="dec_"+i;
                 input2.type = "image";
                 input2.className="icon";
-                input2.src="../frontend/plus-solid.svg"
+                input2.src="../frontend/misc/plus-solid.svg"
                 input2.id="inc_"+i;
 
                 span.id="qty_"+i;

@@ -285,7 +285,8 @@ $(document).on('click', 'input', 'button',function(e){
             placeOrder.style.visibility = "hidden";
 
             var childCount = document.getElementById("menu").childElementCount
-            for(var i=0;i<childCount;i+=1){
+            console.log(childCount)
+            for(var i=1;i<childCount+1;i+=1){
                 document.getElementById("row_"+i).remove();
             }
         }

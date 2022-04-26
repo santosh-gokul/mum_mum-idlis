@@ -290,8 +290,6 @@ $(document).on('click', 'input', 'button',function(e){
         item_counter[current_page+"_"+idClicked.split('_')[1]] = Math.max(item_counter[current_page+"_"+idClicked.split('_')[1]],0);
         $('#qty_'+idClicked.split('_')[1]).text(item_counter[current_page+"_"+idClicked.split('_')[1]]);
     }
-
-
         
 });
 

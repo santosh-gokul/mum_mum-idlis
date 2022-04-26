@@ -1,0 +1,63 @@
+body {
+    background-image: url(../frontend/Mediamodifier-Design.svg);
+    background-attachment: scroll; 
+    background-repeat: no-repeat;;
+    }
+
+    br {
+        line-height: 950%;
+    }
+
+    .title{
+        margin-left: 5vmin;
+        text-align: center;
+        font-family: 'Gilroy', sans-serif;
+        font-size: 10vmin;
+        line-height: 40%;
+        font-weight: 500;
+        color:  #ffefc0;
+        
+    }
+
+    .sp_name{
+        
+        font-family: 'Gilroy', sans-serif;
+        font-size: 5vmin;
+        line-height: 100%;
+        font-weight: 200;
+        color:  #000000;
+    }
+
+    .items{
+        font-family: 'Gilroy', sans-serif;
+        font-size: 2vmin;
+        line-height: 100%;
+        font-weight: 50;
+        color:  #000000;
+    }
+
+    .title1{
+        margin-left: 5vmin;
+        padding-right: 10vmin;
+        font-family: 'Gilroy', sans-serif;
+        font-size: 10vmin;
+        line-height: 30%;
+        font-weight: 300;
+        color:  #ffefc0;
+    }
+
+    .row_out{
+        margin-top: 20vmin;
+    }
+
+    .row_menu{
+        margin-top: 5vmin;
+    }
+
+    .icon{
+        border: #000000; border-radius: 50%; border: 2px solid green;
+        height: 20px;
+        width: 20px;
+    }
+
+    

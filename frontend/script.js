@@ -7,6 +7,12 @@ var item_name = {};
 var page_states = {}
 var max_pg_seen = 0;
 
+window.addEventListener("resize", resizeFunc);
+
+function resizeFunc(){
+    
+}
+
 function loadFunc() {
     var match,
         pl     = /\+/g,  // Regex for replacing addition symbol with a space

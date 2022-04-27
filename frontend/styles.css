@@ -1,7 +1,8 @@
 body {
     background-image: url(../frontend/misc/Mediamodifier-Design.svg);
     background-attachment: scroll; 
-    background-repeat: no-repeat;;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
     }
 
     br {
@@ -60,4 +61,31 @@ body {
         width: 20px;
     }
 
-    
+    @media only screen and (max-width: 768px) {
+        body {
+            background-image: url(../frontend/misc/Mediamodifier-Design_mob.svg);
+            background-size: 100% 200%;
+            }
+
+        .dynamicMainTitle{
+                text-align: center;
+            }
+
+        .dynamicSecondaryTitle{
+                text-align: center;
+                margin-top: 10vmin;
+            }
+        .row_out{
+                margin-top: 5vmin;
+            }
+
+            .sp_name{
+        
+                font-family: 'Gilroy', sans-serif;
+                font-size: 5vmin;
+                line-height: 100%;
+                font-weight: 200;
+                color:  #FFFF;
+            }
+            
+    }

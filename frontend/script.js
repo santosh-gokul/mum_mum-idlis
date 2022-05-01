@@ -51,7 +51,7 @@ function loadFunc() {
 
                 var element1 = document.createElement("div");
                 element1.className="col-lg-8 items";
-                //element1.id="item-"+i;
+                element1.id="item-"+i;
 
                 var element1pt1 = document.createElement("span");
                 element1pt1.className='price-br';
@@ -193,12 +193,14 @@ $(document).on('click', 'input', 'button',function(e){
                 rowElement.id = "row_"+i;
 
                 var element1 = document.createElement("div");
+                var element1pt2 = document.createElement("div");
                 var element1pt1 = document.createElement("div");
                 element1pt1.className='price-br';
                 element1pt1.id='item_price-'+i;
+                element1pt2.className="col-lg-8 items";
+                element1pt2.id="item-"+i;
+                element1.appendChild(element1pt2);
                 element1.appendChild(element1pt1);
-                element1.className="col-lg-8 items";
-                element1.id="item-"+i;
                 rowElement.appendChild(element1);
 
 

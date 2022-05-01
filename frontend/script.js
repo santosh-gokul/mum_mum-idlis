@@ -1,6 +1,7 @@
 var apiEndpoint = "https://mum-mum-idilis.herokuapp.com/"
 var urlParams;
 var dataFromApi;
+var itemPriceFromApi;
 var current_page = 0;
 var item_counter = {};
 var item_name = {};
@@ -42,6 +43,7 @@ function loadFunc() {
 
                 dataFromApi = response['data']['menu_items']; // Currently mocked, replace with api call.
                 itemPriceFromApi = response['data']['item_price'];
+
                 for(var i=1;i<=Math.min(4, dataFromApi.length);i+=1){
                 var rowElement = document.createElement("div");
                 rowElement.className = "row row_menu";

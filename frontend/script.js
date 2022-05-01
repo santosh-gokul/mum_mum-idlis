@@ -43,7 +43,6 @@ function loadFunc() {
 
                 dataFromApi = response['data']['menu_items']; // Currently mocked, replace with api call.
                 itemPriceFromApi = response['data']['item_price'];
-                console.log(itemPriceFromApi);
 
                 for(var i=1;i<=Math.min(4, dataFromApi.length);i+=1){
                 var rowElement = document.createElement("div");
@@ -51,12 +50,14 @@ function loadFunc() {
                 rowElement.id = "row_"+i;
 
                 var element1 = document.createElement("div");
+                element1.className="col-lg-8 items";
+                element1.id="item-"+i;
+                
                 var element1pt1 = document.createElement("div");
                 element1pt1.className='price-br';
                 element1pt1.id='item_price-'+i;
+
                 element1.appendChild(element1pt1);
-                element1.className="col-lg-8 items";
-                element1.id="item-"+i;
                 rowElement.appendChild(element1);
 
 

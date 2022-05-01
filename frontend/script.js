@@ -52,8 +52,8 @@ function loadFunc() {
                 var element1 = document.createElement("div");
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
-                
-                var element1pt1 = document.createElement("div");
+
+                var element1pt1 = document.createElement("span");
                 element1pt1.className='price-br';
                 element1pt1.id='item_price-'+i;
 

@@ -82,7 +82,7 @@ function loadFunc() {
                 element2.appendChild(input1);
                 element2.appendChild(span);
                 element2.appendChild(input2);
-                element2.appendChild(element1pt1);
+                element1.appendChild(element1pt1);
 
                 rowElement.appendChild(element2);
 

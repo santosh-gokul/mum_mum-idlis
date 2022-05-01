@@ -5,8 +5,8 @@ body {
     background-repeat: no-repeat;
     }
 
-    br {
-        line-height: 950%;
+    .price-br{
+        padding-top: 5vmin;
     }
 
     .title{
@@ -77,7 +77,7 @@ body {
                 margin-top: 5vmin;
             }
 
-            .sp_name{
+        .sp_name{
         
                 font-family: 'Gilroy', sans-serif;
                 font-size: 5vmin;
@@ -86,7 +86,7 @@ body {
                 color:  #FFFF;
             }
         
-            br {
+        br {
                 line-height: 15vmin;
             }
 

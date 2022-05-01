@@ -4,6 +4,7 @@ var dataFromApi;
 var current_page = 0;
 var item_counter = {};
 var item_name = {};
+var item_price = {};
 var page_states = {}
 var max_pg_seen = 0;
 
@@ -40,13 +41,17 @@ function loadFunc() {
                 placeOrder.style.visibility = "none";
 
                 dataFromApi = response['data']['menu_items']; // Currently mocked, replace with api call.
-
+                itemPriceFromApi = response['data']['item_price'];
                 for(var i=1;i<=Math.min(4, dataFromApi.length);i+=1){
                 var rowElement = document.createElement("div");
                 rowElement.className = "row row_menu";
                 rowElement.id = "row_"+i;
 
                 var element1 = document.createElement("div");
+                var element1pt1 = document.createElement("div");
+                element1pt1.className='price-br';
+                element1pt1.id='item_price-'+i;
+                element1.appendChild(element1pt1);
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
                 rowElement.appendChild(element1);
@@ -80,8 +85,10 @@ function loadFunc() {
 
 
                 $('#item-'+i).text(dataFromApi[i-1]);
+                $('#item_price-'+i).text(itemPriceFromApi[i-1]);
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
+                item_price[current_page+"_"+i] = $('#item_price-'+i).text();
                 item_counter[current_page+"_"+i] = 0;
             }
         }
@@ -181,6 +188,10 @@ $(document).on('click', 'input', 'button',function(e){
                 rowElement.id = "row_"+i;
 
                 var element1 = document.createElement("div");
+                var element1pt1 = document.createElement("div");
+                element1pt1.className='price-br';
+                element1pt1.id='item_price-'+i;
+                element1.appendChild(element1pt1);
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
                 rowElement.appendChild(element1);
@@ -216,6 +227,7 @@ $(document).on('click', 'input', 'button',function(e){
         }
         for(var i=1;i<=4;i+=1){
             $('#item-'+i).text(item_name[current_page+"_"+i]);
+            $('#item_price-'+i).text(item_price[current_page+"_"+i]);
             $('#qty_'+i).text(item_counter[current_page+"_"+i]);
         }
     }
@@ -232,6 +244,10 @@ $(document).on('click', 'input', 'button',function(e){
                 rowElement.id = "row_"+i;
 
                 var element1 = document.createElement("div");
+                var element1pt1 = document.createElement("div");
+                element1pt1.className='price-br';
+                element1pt1.id='item_price-'+i;
+                element1.appendChild(element1pt1);
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
                 rowElement.appendChild(element1);
@@ -272,12 +288,15 @@ $(document).on('click', 'input', 'button',function(e){
         for(var i=1;i<=requiredElement;i+=1){
             if(max_pg_seen>=current_page){
                 $('#item-'+i).text(item_name[current_page+"_"+i]);
+                $('#item_price-'+i).text(itemPriceFromApi[current_page+"_"+i]);
                 $('#qty_'+i).text(item_counter[current_page+"_"+i]);
             }
             else{
                 $('#item-'+i).text(dataFromApi[current_page*4+i-1]);
+                $('#item_price-'+i).text(itemPriceFromApi[current_page*4+i-1]);
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
+                item_price[current_page+"_"+i] = $('#item_price-'+i).text();
                 item_counter[current_page+"_"+i] = $('#qty_'+i).text();
             }
         }

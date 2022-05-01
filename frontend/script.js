@@ -89,7 +89,7 @@ function loadFunc() {
 
 
                 $('#item-'+i).text(dataFromApi[i-1]);
-                $('#item_price-'+i).text(itemPriceFromApi[i-1]);
+                $('#item_price-'+i).text("Oy");
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
                 item_price[current_page+"_"+i] = $('#item_price-'+i).text();

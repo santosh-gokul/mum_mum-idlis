@@ -57,7 +57,7 @@ function loadFunc() {
                 element1pt1.className='price-br';
                 element1pt1.id='item_price-'+i;
 
-                element1.appendChild(element1pt1);
+                
                 rowElement.appendChild(element1);
 
 
@@ -82,6 +82,7 @@ function loadFunc() {
                 element2.appendChild(input1);
                 element2.appendChild(span);
                 element2.appendChild(input2);
+                element2.appendChild(element1pt1);
 
                 rowElement.appendChild(element2);
 
@@ -89,7 +90,7 @@ function loadFunc() {
 
 
                 $('#item-'+i).text(dataFromApi[i-1]);
-                $('#item_price-'+i).text("Oy");
+                $('#item_price-'+i).text(itemPriceFromApi[i-1]);
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
                 item_price[current_page+"_"+i] = $('#item_price-'+i).text();

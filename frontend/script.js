@@ -85,7 +85,7 @@ function loadFunc() {
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
                 item_price[current_page+"_"+i] = $('#item_price-'+i).text();
-                item_counter[current_page+"_"+i] = 0;
+                item_counter[item_name[current_page+"_"+i]] = 0;
             }
         }
         else{
@@ -219,7 +219,7 @@ $(document).on('click', 'input', 'button',function(e){
         }
         for(var i=1;i<=4;i+=1){
             $('#item-'+i).innerHTML(item_name[current_page+"_"+i]+"<div class ='price-br' id='item_price-"+i+"'>Rs. "+item_price[current_page+"_"+i]+"</div>");
-            $('#qty_'+i).text(item_counter[current_page+"_"+i]);
+            $('#qty_'+i).text(item_counter[item_name[current_page+"_"+i]]);
         }
     }
     if(idClicked==='go-right' && current_page+1<Math.round(dataFromApi.length)/4){
@@ -275,14 +275,14 @@ $(document).on('click', 'input', 'button',function(e){
         for(var i=1;i<=requiredElement;i+=1){
             if(max_pg_seen>=current_page){
                 $('#item-'+i).innerHTML(item_name[current_page+"_"+i]+"<div class ='price-br' id='item_price-"+i+"'>Rs. "+item_price[current_page+"_"+i]+"</div>");
-                $('#qty_'+i).text(item_counter[current_page+"_"+i]);
+                $('#qty_'+i).text(item_counter[item_name[current_page+"_"+i]]);
             }
             else{
                 $('#item-'+i).innerHTML(dataFromApi[current_page*4+i-1]+"<div class ='price-br' id='item_price-"+i+"'>Rs. "+itemPriceFromApi[current_page*4+i-1]+"</div>");
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
                 item_price[current_page+"_"+i] = $('#item_price-'+i).text();
-                item_counter[current_page+"_"+i] = $('#qty_'+i).text();
+                item_counter[item_name[current_page+"_"+i]] = $('#qty_'+i).text();
             }
         }
         max_pg_seen = Math.max(current_page, max_pg_seen);

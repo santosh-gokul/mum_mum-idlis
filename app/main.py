@@ -120,6 +120,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     result = populate_menu(token=token, graph_driver=graph_driver)
     if result.status_code!=200:
        return JSONResponse(status_code=401, content={'success': False})
+    print(data, "DATA")
     
 
     

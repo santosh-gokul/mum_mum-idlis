@@ -52,7 +52,7 @@ function loadFunc() {
                 var element1 = document.createElement("div");
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
-                element1.innerHTML = "<div class ='price-br' id='item_price-"+i+"'></div>"
+                element1.innerHTML = dataFromApi[i-1]+"<div class ='price-br' id='item_price-"+i+"'></div>"
                 rowElement.appendChild(element1);
 
 
@@ -83,7 +83,6 @@ function loadFunc() {
                 document.getElementById("menu").appendChild(rowElement);
 
 
-                $('#item-'+i).text(dataFromApi[i-1]);
                 $('#item_price-'+i).text(itemPriceFromApi[i-1]);
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();

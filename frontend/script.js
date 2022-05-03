@@ -291,7 +291,7 @@ $(document).on('click', 'input', 'button',function(e){
     if(idClicked.split('_')[0]==='inc'){
         console.log("Hii")
         item_counter[item_name[current_page+"_"+idClicked.split('_')[1]]] = parseInt(item_counter[item_name[current_page+"_"+idClicked.split('_')[1]]])+1;
-        $('#qty_'+idClicked.split('_')[1]).text(item_counter[current_page+"_"+idClicked.split('_')[1]]);
+        $('#qty_'+idClicked.split('_')[1]).text(item_counter[item_name[current_page+"_"+idClicked.split('_')[1]]]);
         console.log(item_counter[item_name[current_page+"_"+idClicked.split('_')[1]]])
 
     }

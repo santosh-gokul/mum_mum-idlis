@@ -106,7 +106,7 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
     menu_items = []
     item_price = []
     for item in client_info:
-        for unit, price in item['R'].get('unit', []), item['R'].get('price', []):
+        for unit, price in zip(item['R'].get('unit', []), item['R'].get('price', [])):
             metric = item['R'].get('metric', '')
             menu_items.append(item['P']['name']+f" (Pack of {unit}{metric})")
             item_price.append(price)
@@ -132,7 +132,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     create_query = "CREATE "
     total_order_price = 0
     for item in client_info:
-        for unit, price in item['R'].get('unit', []), item['R'].get('price', []): 
+        for unit, price in zip(item['R'].get('unit', []), item['R'].get('price', [])): 
             qty = data[str(ctr//4)+"_"+str(ctr%4+1)]
             if qty==0:
                 ctr+=1

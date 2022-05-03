@@ -1,6 +1,6 @@
 
 body {
-    background-image: url(../frontend/misc/Mediamodifier-Design_mob.svg);
+    background-image: url(../frontend/misc/Mediamodifier-Design.svg);
     background-attachment: scroll; 
     background-repeat: no-repeat;
     }
@@ -16,7 +16,7 @@ body {
         font-size: 10vmin;
         line-height: 40%;
         font-weight: 500;
-        color:  #000000;
+        color:  #FFFF;
         
     }
 
@@ -36,6 +36,9 @@ body {
         font-weight: 50;
         color:  #000000;
     }
+    .title_br{
+        line-height: 900%;
+    }
 
     .title1{
         margin-left: 5vmin;
@@ -44,7 +47,7 @@ body {
         font-size: 10vmin;
         line-height: 30%;
         font-weight: 300;
-        color:  #000000;
+        color:  #FFFF;
     }
 
     .row_out{

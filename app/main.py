@@ -139,9 +139,8 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 ctr+=1
                 continue
             item_name = str(item['P']['name'])
-            match_query+=f"({item_name}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
-            create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}"+"}"+f" ]->\
-            ({item_name}), "
+            match_query+=f"({item_name}{ctr}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
+            create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}"+"}"+f" ]->({item_name}{ctr}), "
             total_order_price+=price*qty
             ctr+=1
         else:
@@ -152,9 +151,8 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                     continue
                 item_name = str(item['P']['name'])
                 item_unit = unit
-                match_query+=f"({item_name}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
-                create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}, unit: {item_unit}"+"}"+f" ]->\
-                ({item_name}), "
+                match_query+=f"({item_name}{ctr}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
+                create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}, unit: {item_unit}"+"}"+f" ]->({item_name}{ctr}), "
                 total_order_price+=price*qty
                 ctr+=1
 

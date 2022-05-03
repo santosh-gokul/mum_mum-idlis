@@ -52,12 +52,7 @@ function loadFunc() {
                 var element1 = document.createElement("div");
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
-
-                var element1pt1 = document.createElement("span");
-                element1pt1.className='price-br';
-                element1pt1.id='item_price-'+i;
-
-                
+                element1.innerHTML = "<div class ='price-br' id='item_price-'"+i+"></div>"
                 rowElement.appendChild(element1);
 
 
@@ -82,7 +77,6 @@ function loadFunc() {
                 element2.appendChild(input1);
                 element2.appendChild(span);
                 element2.appendChild(input2);
-                element1.appendChild(element1pt1);
 
                 rowElement.appendChild(element2);
 

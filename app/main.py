@@ -129,7 +129,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
         where S.seller_id="{decode_data["sp_id"]}" RETURN S,R,P'))
 
     ctr = 0
-    match_query = "MATCH (O:Order {"+f"date_time: {int(time.time())}, payment_status: In Progress, total_amount: {total_order_price}"+"}), "
+    match_query = ""
     create_query = "CREATE "
     total_order_price = 0
     for item in client_info:
@@ -158,6 +158,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
 
     #Creating an order node in the db.
 
+    match_query = "MATCH (O:Order {"+f"date_time: {int(time.time())}, payment_status: In Progress, total_amount: {total_order_price}"+"}), "+match_query
     print("MATCH", match_query)
     print("CREATE", create_query)
     print("TOA", total_order_price)

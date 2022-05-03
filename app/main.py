@@ -9,6 +9,7 @@
 import json
 from fastapi.responses import JSONResponse
 from uuid import uuid4
+import time    
 
 from fastapi import Body, FastAPI, Path, Depends, Request
 from fastapi.staticfiles import StaticFiles
@@ -105,24 +106,65 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
     menu_items = []
     item_price = []
     for item in client_info:
-        for unit in item['R'].get('unit', []):
+        for unit, price in item['R'].get('unit', []), item['R'].get('price', []):
             metric = item['R'].get('metric', '')
             menu_items.append(item['P']['name']+f" (Pack of {unit}{metric})")
+            item_price.append(price)
         if len(item['R'].get('unit', []))==0:
             menu_items.append(item['P']['name'])
-        item_price.extend(item['R'].get('price', []))
+            item_price.append(item['R']['price'])
     
     return JSONResponse(status_code=200, content={'success': True, 'data': {'store_name':client_info[0]['S']['name'], 'menu_items': menu_items, 
     'item_price': item_price}})
 
 @app.post("/place_order/{token}")
 def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
-    result = populate_menu(token=token, graph_driver=graph_driver)
+    result = validate_token(token=token, graph_driver=graph_driver)
     if result.status_code!=200:
        return JSONResponse(status_code=401, content={'success': False})
-    print(data, "DATA")
     
+    decode_data = jwt.decode(token, settings.SECRET, algorithms=["HS256"])
+    client_info = list(graph_driver.run(f'MATCH p=(S:ServiceProvider)-[R:SELLS]->(P:ProductCatalogue)\
+        where S.seller_id="{decode_data["sp_id"]}" RETURN S,R,P'))
 
+    ctr = 0
+    match_query = "MATCH (O:Order $props), "
+    create_query = "CREATE "
+    total_order_price = 0
+    for item in client_info:
+        for unit, price in item['R'].get('unit', []), item['R'].get('price', []): 
+            qty = data[str(ctr//4)+"_"+str(ctr%4+1)]
+            if qty==0:
+                ctr+=1
+                continue
+            item_name = str(item['P']['name'])
+            item_unit = unit
+            match_query+=f"({item_name}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
+            create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}, unit: {item_unit}"+"}"+f" ]->\
+            ({item_name}), "
+            total_order_price+=price*qty
+            ctr+=1
+        if len(item['R'].get('unit', []))==0:
+            qty = data[str(ctr//4)+"_"+str(ctr%4+1)] 
+            if qty==0:
+                ctr+=1
+                continue
+            item_name = str(item['P']['name'])
+            match_query+=f"({item_name}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
+            create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}"+"}"+f" ]->\
+            ({item_name}), "
+            total_order_price+=price*qty
+            ctr+=1
+
+    #Creating an order node in the db.
+
+    print("MATCH", match_query)
+    print("CREATE", create_query)
+    print("TOA", total_order_price)
+    graph_driver.run(match_query[:-2]+create_query[:-2]+";", props={'date_time': int(time.time()),
+         'payment_status': "In Progress",
+         'total_amount': total_order_price})
+    
     
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""

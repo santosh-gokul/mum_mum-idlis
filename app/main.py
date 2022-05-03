@@ -131,6 +131,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     ctr = 0
     match_query = ""
     create_query = "CREATE "
+    props = {}
     total_order_price = 0
     for item in client_info:
         if len(item['R'].get('unit', []))==0:
@@ -139,9 +140,13 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 ctr+=1
                 continue
             item_name = str(item['P']['name'])
-            match_query+=f"({item_name}{ctr}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
-            create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}"+"}"+f" ]->({item_name}{ctr}), "
+            match_query+=f"(${item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"},"
+            create_query+="(O)-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
             total_order_price+=price*qty
+            props[f"${item_name}{ctr}"] = f"{item_name}{ctr}"
+            props[f"$tp_{item_name}{ctr}"] = qty*price
+            props[f"$qt_{item_name}{ctr}"] = qty
+            props[f"$ut_{item_name}{ctr}"] = unit
             ctr+=1
         else:
             for unit, price in zip(item['R'].get('unit', []), item['R'].get('price', [])): 
@@ -151,18 +156,25 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                     continue
                 item_name = str(item['P']['name'])
                 item_unit = unit
-                match_query+=f"({item_name}{ctr}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
-                create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}, unit: {item_unit}"+"}"+f" ]->({item_name}{ctr}), "
+                match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"},"
+                create_query+="(O)-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
                 total_order_price+=price*qty
+                props[f"${item_name}{ctr}"] = f"{item_name}{ctr}"
+                props[f"$tp_{item_name}{ctr}"] = qty*price
+                props[f"$qt_{item_name}{ctr}"] = qty
+                props[f"$ut_{item_name}{ctr}"] = unit
                 ctr+=1
 
     #Creating an order node in the db.
 
-    match_query = "MATCH (O:Order {"+f"date_time: {int(time.time())}, payment_status: In Progress, total_amount: {total_order_price}"+"}), "+match_query
+    match_query = "MATCH (O:Order {date_time: $date_time, payment_status: In Progress, total_amount: $total_order_price}), "+match_query
+    props["$date_time"] = int(time.time())
+    props["$total_order_price"] = total_order_price
+    
     print("MATCH", match_query)
     print("CREATE", create_query)
     print("TOA", total_order_price)
-    graph_driver.query(match_query[:-2]+create_query[:-2]+";")
+    graph_driver.query(match_query[:-2]+create_query[:-2]+";", props)
     
     
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:

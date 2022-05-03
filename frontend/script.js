@@ -52,7 +52,7 @@ function loadFunc() {
                 var element1 = document.createElement("div");
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
-                element1.innerHTML = "<div class ='price-br' id='item_price-'"+i+"></div>"
+                element1.innerHTML = "<div class ='price-br' id='item_price-"+i+"'></div>"
                 rowElement.appendChild(element1);
 
 

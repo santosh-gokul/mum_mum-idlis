@@ -106,13 +106,14 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
     menu_items = []
     item_price = []
     for item in client_info:
-        for unit, price in zip(item['R'].get('unit', []), item['R'].get('price', [])):
-            metric = item['R'].get('metric', '')
-            menu_items.append(item['P']['name']+f" (Pack of {unit}{metric})")
-            item_price.append(price)
         if len(item['R'].get('unit', []))==0:
             menu_items.append(item['P']['name'])
             item_price.append(item['R']['price'])
+        else:
+            for unit, price in zip(item['R'].get('unit', []), item['R'].get('price', [])):
+                metric = item['R'].get('metric', '')
+                menu_items.append(item['P']['name']+f" (Pack of {unit}{metric})")
+                item_price.append(price)
     
     return JSONResponse(status_code=200, content={'success': True, 'data': {'store_name':client_info[0]['S']['name'], 'menu_items': menu_items, 
     'item_price': item_price}})
@@ -132,18 +133,6 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     create_query = "CREATE "
     total_order_price = 0
     for item in client_info:
-        for unit, price in zip(item['R'].get('unit', []), item['R'].get('price', [])): 
-            qty = data[str(ctr//4)+"_"+str(ctr%4+1)]
-            if qty==0:
-                ctr+=1
-                continue
-            item_name = str(item['P']['name'])
-            item_unit = unit
-            match_query+=f"({item_name}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
-            create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}, unit: {item_unit}"+"}"+f" ]->\
-            ({item_name}), "
-            total_order_price+=price*qty
-            ctr+=1
         if len(item['R'].get('unit', []))==0:
             qty = data[str(ctr//4)+"_"+str(ctr%4+1)] 
             if qty==0:
@@ -155,6 +144,19 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
             ({item_name}), "
             total_order_price+=price*qty
             ctr+=1
+        else:
+            for unit, price in zip(item['R'].get('unit', []), item['R'].get('price', [])): 
+                qty = data[str(ctr//4)+"_"+str(ctr%4+1)]
+                if qty==0:
+                    ctr+=1
+                    continue
+                item_name = str(item['P']['name'])
+                item_unit = unit
+                match_query+=f"({item_name}: ProductCatalogue "+"{name: "+f"{item_name})"+"}, "
+                create_query+="(O)-[I:INCLUDES {"+f"total_price:{price*qty}, quantity: {qty}, unit: {item_unit}"+"}"+f" ]->\
+                ({item_name}), "
+                total_order_price+=price*qty
+                ctr+=1
 
     #Creating an order node in the db.
 

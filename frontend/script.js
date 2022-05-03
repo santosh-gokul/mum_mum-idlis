@@ -85,7 +85,7 @@ function loadFunc() {
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
                 item_price[current_page+"_"+i] = $('#item_price-'+i).text();
-                item_counter[item_name[current_page+"_"+i]] = 0;
+                item_counter[current_page+"_"+i] = 0;
             }
         }
         else{

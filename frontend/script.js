@@ -52,7 +52,7 @@ function loadFunc() {
                 var element1 = document.createElement("div");
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
-                element1.innerHTML = dataFromApi[i-1]+"<div class ='price-br' id='item_price-"+i+"'></div>"
+                element1.innerHTML = dataFromApi[i-1]+"<div class ='price-br' id='item_price-"+i+"'>Rs. "+itemPriceFromApi[i-1]+"</div>"
                 rowElement.appendChild(element1);
 
 
@@ -82,8 +82,6 @@ function loadFunc() {
 
                 document.getElementById("menu").appendChild(rowElement);
 
-
-                $('#item_price-'+i).text(itemPriceFromApi[i-1]);
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
                 item_price[current_page+"_"+i] = $('#item_price-'+i).text();
@@ -188,7 +186,6 @@ $(document).on('click', 'input', 'button',function(e){
                 var element1 = document.createElement("div");
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
-                element1.innerHTML = "<div class ='price-br' id='item_price-'"+i+"></div>"
                 rowElement.appendChild(element1);
 
 
@@ -221,8 +218,7 @@ $(document).on('click', 'input', 'button',function(e){
         
         }
         for(var i=1;i<=4;i+=1){
-            $('#item-'+i).text(item_name[current_page+"_"+i]);
-            $('#item_price-'+i).text(item_price[current_page+"_"+i]);
+            $('#item-'+i).innerHTML(item_name[current_page+"_"+i]+"<div class ='price-br' id='item_price-"+i+"'>Rs. "+item_price[current_page+"_"+i]+"</div>");
             $('#qty_'+i).text(item_counter[current_page+"_"+i]);
         }
     }
@@ -239,10 +235,6 @@ $(document).on('click', 'input', 'button',function(e){
                 rowElement.id = "row_"+i;
 
                 var element1 = document.createElement("div");
-                var element1pt1 = document.createElement("div");
-                element1pt1.className='price-br';
-                element1pt1.id='item_price-'+i;
-                element1.appendChild(element1pt1);
                 element1.className="col-lg-8 items";
                 element1.id="item-"+i;
                 rowElement.appendChild(element1);
@@ -282,13 +274,11 @@ $(document).on('click', 'input', 'button',function(e){
         }
         for(var i=1;i<=requiredElement;i+=1){
             if(max_pg_seen>=current_page){
-                $('#item-'+i).text(item_name[current_page+"_"+i]);
-                $('#item_price-'+i).text(itemPriceFromApi[current_page+"_"+i]);
+                $('#item-'+i).innerHTML(item_name[current_page+"_"+i]+"<div class ='price-br' id='item_price-"+i+"'>Rs. "+item_price[current_page+"_"+i]+"</div>");
                 $('#qty_'+i).text(item_counter[current_page+"_"+i]);
             }
             else{
-                $('#item-'+i).text(dataFromApi[current_page*4+i-1]);
-                $('#item_price-'+i).text(itemPriceFromApi[current_page*4+i-1]);
+                $('#item-'+i).innerHTML(dataFromApi[current_page*4+i-1]+"<div class ='price-br' id='item_price-"+i+"'>Rs. "+itemPriceFromApi[current_page*4+i-1]+"</div>");
                 $('#qty_'+i).text(0);
                 item_name[current_page+"_"+i] =  $('#item-'+i).text();
                 item_price[current_page+"_"+i] = $('#item_price-'+i).text();

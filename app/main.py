@@ -141,7 +141,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 continue
             item_name = str(item['P']['name'])
             match_query+=f"(${item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
-            create_query+="(O)-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
+            create_query+="(O:Order {date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
             total_order_price+=price*qty
             props[f"{item_name}{ctr}"] = f"{item_name}{ctr}"
             props[f"tp_{item_name}{ctr}"] = qty*price
@@ -157,7 +157,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 item_name = str(item['P']['name'])
                 item_unit = unit
                 match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
-                create_query+="(O)-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
+                create_query+="(O:Order {date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
                 total_order_price+=price*qty
                 props[f"{item_name}{ctr}"] = f"{item_name}{ctr}"
                 props[f"tp_{item_name}{ctr}"] = qty*price
@@ -167,7 +167,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
 
     #Creating an order node in the db.
 
-    match_query = "MATCH (O:Order {date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price}), "+match_query
+    match_query = "MATCH "+match_query
     props["date_time"] = int(time.time())
     props["total_order_price"] = total_order_price
     

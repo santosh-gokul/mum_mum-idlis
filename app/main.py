@@ -140,7 +140,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 ctr+=1
                 continue
             item_name = str(item['P']['name'])
-            match_query+=f"(${item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}, "
+            match_query+=f"(${item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
             create_query+="(O)-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
             total_order_price+=price*qty
             props[f"${item_name}{ctr}"] = f"{item_name}{ctr}"
@@ -156,7 +156,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                     continue
                 item_name = str(item['P']['name'])
                 item_unit = unit
-                match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}, "
+                match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
                 create_query+="(O)-[I:INCLUDES {"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
                 total_order_price+=price*qty
                 props[f"${item_name}{ctr}"] = f"{item_name}{ctr}"

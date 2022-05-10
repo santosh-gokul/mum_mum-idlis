@@ -167,7 +167,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
 
     #Creating an order node in the db.
 
-    match_query = "MATCH (O:Order {date_time: $date_time, payment_status: In Progress, total_amount: $total_order_price}), "+match_query
+    match_query = "MATCH (O:Order {date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price}), "+match_query
     props["$date_time"] = int(time.time())
     props["$total_order_price"] = total_order_price
     

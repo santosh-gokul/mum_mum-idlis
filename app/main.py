@@ -176,7 +176,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     print("TOA", total_order_price)
     print("PROP", props)
     result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+";", props)
-    print(result)
+    print(list(result))
     
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""

@@ -141,7 +141,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 continue
             item_name = str(item['P']['name'])
             match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
-            create_query+="(O:Order {date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})-"+f"[I{ctr}:INCLUDES"+ "{"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
+            create_query+=f"(O{ctr}:Order"+"{date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})-"+f"[I{ctr}:INCLUDES"+ "{"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
             total_order_price+=price*qty
             props[f"{item_name}{ctr}"] = f"{item_name}{ctr}"
             props[f"tp_{item_name}{ctr}"] = qty*price
@@ -157,7 +157,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 item_name = str(item['P']['name'])
                 item_unit = unit
                 match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
-                create_query+="(O:Order {date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+f"-[I{ctr}:INCLUDES"+"{"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
+                create_query+=f"(O{ctr}:Order"+ "{date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+f"-[I{ctr}:INCLUDES"+"{"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
                 total_order_price+=price*qty
                 props[f"{item_name}{ctr}"] = f"{item_name}{ctr}"
                 props[f"tp_{item_name}{ctr}"] = qty*price

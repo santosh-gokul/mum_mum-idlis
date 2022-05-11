@@ -175,7 +175,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     print("CREATE", create_query)
     print("TOA", total_order_price)
     print("PROP", props)
-    result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O;", props)
+    result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O0;", props)
     print(list(result))
     
 def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:

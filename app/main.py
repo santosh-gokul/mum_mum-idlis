@@ -166,12 +166,14 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     props["date_time"] = int(time.time())
     props["total_order_price"] = total_order_price
     
-    print("MATCH", match_query)
-    print("CREATE", create_query)
-    print("TOA", total_order_price)
-    print("PROP", props)
+    print("MATCH: ", match_query)
+    print("CREATE: ", create_query)
+    print("TOA: ", total_order_price)
+    print("PROP: ", props)
     result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O0;", props)
     print(list(result))
+
+    return JSONResponse(status_code=200, content={'success': True})
     
 def start(bot, update, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""

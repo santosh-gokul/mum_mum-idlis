@@ -141,7 +141,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
             if ctr == 0:
                 create_query = f"(O:Order"+"{date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+create_query
             else:
-                create_query = "(O)"
+                create_query = "(O)"+create_query
             total_order_price+=price*qty
             props[f"{item_name}{ctr}"] = f"{item_name}"
             props[f"tp_{item_name}{ctr}"] = qty*price
@@ -161,7 +161,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 if ctr == 0:
                     create_query = f"(O:Order"+"{date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+create_query
                 else:
-                    create_query = "(O)"
+                    create_query = "(O)"+create_query
                 total_order_price+=price*qty
                 props[f"{item_name}{ctr}"] = f"{item_name}"
                 props[f"tp_{item_name}{ctr}"] = qty*price

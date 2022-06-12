@@ -66,13 +66,8 @@ def enquire_order(token: str = Path(...), payload: dict=None, graph_driver = Dep
         bot.send_message(update.message.chat_id, text=return_text)
 
     else:
-        if str(update.message.chat_id) in chat_data.keys():
-            if (str(update.message.text).lower() == 'order'):
-                start(bot, update, chat_data, sp_info, client_info, graph_driver)
-            else:
-                pass
-        elif (str(update.message.text).lower() == 'order'):
-            start(bot, update, chat_data, sp_info, client_info, graph_driver)
+        if (str(update.message.text).lower() == 'order'):
+            start(bot, update, sp_info, client_info, graph_driver)
         else:
             bot.send_message(update.message.chat_id, text="Sorry, I don't understand!")
 
@@ -159,7 +154,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
                 create_query+=f"(O{ctr}:Order"+ "{date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+f"-[I{ctr}:INCLUDES"+"{"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
                 total_order_price+=price*qty
-                props[f"{item_name}{ctr}"] = f"{item_name}{ctr}"
+                props[f"{item_name}{ctr}"] = f"{item_name}"
                 props[f"tp_{item_name}{ctr}"] = qty*price
                 props[f"qt_{item_name}{ctr}"] = qty
                 props[f"ut_{item_name}{ctr}"] = unit
@@ -178,7 +173,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O0;", props)
     print(list(result))
     
-def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
+def start(bot, update, sp_info, client_info, graph_driver) -> None:
     """Sends a message with three inline buttons attached."""
 
     """
@@ -202,41 +197,6 @@ def start(bot, update,chat_data, sp_info, client_info, graph_driver) -> None:
     encoded_jwt = jwt.encode(jwt_payload, settings.SECRET, algorithm="HS256")
     bot.sendMessage(text=f'Please follow this link to place the order\n{settings.HEROKU_URL}frontend/index.html?identifier={encoded_jwt}',
                     chat_id=update.message.chat_id)
-
-def button(bot, update) -> None:
-    """Parses the CallbackQuery and updates the message text."""
-    query = update.callback_query
-
-    print(query, "QUERY-----------------") #Confirm later the field access correctly.
-    if str(query.data).startswith("PO"):
-        bot.edit_message_text(text = "Thankyou for placing the order, "
-                                     "follow the link below to complete the payment." ,chat_id=update.callback_query.message.chat.id,
-                              message_id=update.callback_query.message.message_id
-                              )
-        #Create an entry in the database.
-
-    else:
-        chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][-1:]] = (-1)**(1+len(query.data.split(':')[0]))+\
-            chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]][query.data.split(':')[0][-1:]]
-
-        keyboard = [
-
-                [InlineKeyboardButton("-", callback_data="-1:" + query.data.split(':')[1]),InlineKeyboardButton(products_map["1"] + (
-                    str(chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["1"])),
-                                     callback_data="1:" + query.data.split(':')[1])],
-                [InlineKeyboardButton(products_map["2"] + (
-                    "🟢" if chat_data[update.callback_query.message.chat.id][query.data.split(':')[1]]["2"] else ""),
-                                     callback_data="2:" + query.data.split(':')[1])],
-                [InlineKeyboardButton("Place order.", callback_data="PO:" + query.data.split(':')[1])]
-        ]
-
-
-        reply_markup = InlineKeyboardMarkup(keyboard, resize_keyboard=True)
-
-        bot.edit_message_text(text='Hey, What would you like to order today?', reply_markup=reply_markup
-        , chat_id = update.callback_query.message.chat.id, message_id = update.callback_query.message.message_id)
-
-
 
 
 

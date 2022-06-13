@@ -123,7 +123,8 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     client_info = list(graph_driver.run(f'MATCH p=(S:ServiceProvider)-[R:SELLS]->(P:ProductCatalogue)\
         where S.seller_id="{decode_data["sp_id"]}" RETURN S,R,P'))
 
-    bot = telegram.Bot(token=client_info['S']['token'])
+    bot = telegram.Bot(token=client_info[0]['S']['token'])
+    print("CLIENT", client_info)
     ctr = 0
     match_query = ""
     create_query = "CREATE "

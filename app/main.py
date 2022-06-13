@@ -129,7 +129,6 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     create_query = "CREATE "
     props = {}
     total_order_price = 0
-    print("CLIENT INFO", client_info)
     for item in client_info:
         if len(item['R'].get('unit', []))==0:
             qty = data[str(ctr//4)+"_"+str(ctr%4+1)] 
@@ -185,7 +184,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     print(list(result))
 
     
-    #bot.send_message(client_info['S']['seller_id'], text = "We've received your order!")
+    bot.send_message(decode_data['chat_id'], text = "We've received your order!")
     return JSONResponse(status_code=200, content={'success': True})
     
 def start(bot, update, sp_info, client_info, graph_driver) -> None:

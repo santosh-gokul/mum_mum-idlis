@@ -187,7 +187,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     bot.send_message(decode_data['chat_id'], text = "We've received your order!")
 
     query = f"MATCH (C:Client) where C.client_id={decode_data['chat_id']} \
-    SET C.token_count={client_info['token_count']+2}" #Two becuz, the actual token sent to the user is one behind the count (0 index).
+    SET C.token_count={decode_data['token_count']+2}" #Two becuz, the actual token sent to the user is one behind the count (0 index).
     graph_driver.run(query)
     return JSONResponse(status_code=200, content={'success': True})
     

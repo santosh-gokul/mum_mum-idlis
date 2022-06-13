@@ -123,6 +123,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     client_info = list(graph_driver.run(f'MATCH p=(S:ServiceProvider)-[R:SELLS]->(P:ProductCatalogue)\
         where S.seller_id="{decode_data["sp_id"]}" RETURN S,R,P'))
 
+    bot = telegram.Bot(token=client_info['S']['token'])
     ctr = 0
     match_query = ""
     create_query = "CREATE "
@@ -182,6 +183,8 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O;", props)
     print(list(result))
 
+    
+    bot.send_message(client_info['S']['seller_id'], text = "We've received your order!")
     return JSONResponse(status_code=200, content={'success': True})
     
 def start(bot, update, sp_info, client_info, graph_driver) -> None:

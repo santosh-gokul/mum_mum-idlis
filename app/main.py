@@ -6,22 +6,21 @@
 
 """
 
-import json
-from fastapi.responses import JSONResponse
-from uuid import uuid4
-import time    
-
-from fastapi import Body, FastAPI, Path, Depends, Request
-from fastapi.staticfiles import StaticFiles
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
-import telegram
-import jwt
 from app.core.config import settings
 from app.core.graphdb import get_session
 from app.core.constants import RESERVED_COMMANDS
 from app.utilities.bot_handler import resolve_query
 from app.utilities.payload_creator import createCashFreeLinkGeneratorPayload
 from app.models.api import GenerateOtp
+
+import telegram
+import jwt
+import time
+import pyotp
+
+from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Path, Depends
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 chat_data = {}
@@ -230,5 +229,10 @@ def start(bot, update, sp_info, client_info, graph_driver) -> None:
 
 
 @app.get("/generate_otp/{token}/{mobile_no}")
-def generate_otp(input = Depends(GenerateOtp)):
-    pass
+def generate_otp(input: GenerateOtp = Depends(GenerateOtp), graph_driver = Depends(get_session)):
+    result = validate_token(token=input.token, graph_driver=graph_driver)
+    if result.status_code!=200:
+       return JSONResponse(status_code=401, content={'success': False})
+       
+    totp = pyotp.TOTP(settings.SECRET+input.mobile_no)
+    return JSONResponse(status_code=201, content={'success': True, 'data': {'otp': totp.now()}})

@@ -29,4 +29,4 @@ class GenerateOtp(BaseModel):
 
     @validator('mobile_no')
     def phone_validator(cls, v):
-        assert len(v)==10 and v.isnumeric(), "Not a valid phone number."
+        assert len(str(v))==10 and str(v).isnumeric(), "Not a valid phone number."

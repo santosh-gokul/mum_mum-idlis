@@ -23,7 +23,6 @@ class GenerateCashFreePaymentLinkRequest(BaseModel):
     link_expiry_time: datetime
     link_auto_reminders: bool = True
 
-@dataclass
 class GenerateOtp(BaseModel):
     token: str = Path(...)
     mobile_no: int = Path(...)

@@ -238,6 +238,6 @@ def generate_otp(input: GenerateOtp = Depends(GenerateOtp), graph_driver = Depen
        return JSONResponse(status_code=401, content={'success': False})
 
     totp = pyotp.TOTP(b32encode(bytes(settings.SECRET+str(input.mobile_no), 'utf-8')))
-    messages = twilio_client.messages.create(to=f"{input.mobile_no}", from_=settings.TWILIO_NUMBER,
+    messages = twilio_client.messages.create(to=f"+91{input.mobile_no}", from_=settings.TWILIO_NUMBER,
      body=f"Your one-time password is {totp.now()}")
     return JSONResponse(status_code=201, content={'success': True, 'data': {'otp': totp.now()}})

@@ -21,6 +21,7 @@ import pyotp
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Path, Depends
 from fastapi.staticfiles import StaticFiles
+from base64 import b32encode
 
 app = FastAPI()
 chat_data = {}
@@ -234,5 +235,5 @@ def generate_otp(input: GenerateOtp = Depends(GenerateOtp), graph_driver = Depen
     if result.status_code!=200:
        return JSONResponse(status_code=401, content={'success': False})
 
-    totp = pyotp.TOTP(settings.SECRET+str(input.mobile_no))
+    totp = pyotp.TOTP(b32encode(bytes(settings.SECRET+str(input.mobile_no), 'utf-8')))
     return JSONResponse(status_code=201, content={'success': True, 'data': {'otp': totp.now()}})

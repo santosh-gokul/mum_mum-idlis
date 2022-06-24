@@ -1,6 +1,7 @@
 from curses.ascii import isalnum
 from datetime import datetime
 from operator import le
+from fastapi import Path
 from pydantic import BaseModel, validator
 
 #Need to add field level validations.
@@ -22,7 +23,7 @@ class GenerateCashFreePaymentLinkRequest(BaseModel):
     link_auto_reminders: bool = True
 
 class GenerateOtp(BaseModel):
-    mobile_no: int
+    mobile_no: int = Path(...)
 
     @validator('mobile_no')
     def phone_validator(cls, v):

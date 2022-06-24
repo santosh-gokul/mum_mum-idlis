@@ -229,6 +229,6 @@ def start(bot, update, sp_info, client_info, graph_driver) -> None:
                     chat_id=update.message.chat_id)
 
 
-@app.get("/generate_otp/{token}/{mobile_no}")
+@app.get("/generate_otp/{token}")
 def generate_otp(token: str, mobile_no: GenerateOtp):
     pass

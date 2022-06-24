@@ -23,6 +23,7 @@ class GenerateCashFreePaymentLinkRequest(BaseModel):
     link_auto_reminders: bool = True
 
 class GenerateOtp(BaseModel):
+    token: str = Path(...)
     mobile_no: int = Path(...)
 
     @validator('mobile_no')

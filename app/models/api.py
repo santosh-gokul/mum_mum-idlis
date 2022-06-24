@@ -1,4 +1,5 @@
 from curses.ascii import isalnum
+from dataclasses import dataclass
 from datetime import datetime
 from operator import le
 from fastapi import Path
@@ -22,6 +23,7 @@ class GenerateCashFreePaymentLinkRequest(BaseModel):
     link_expiry_time: datetime
     link_auto_reminders: bool = True
 
+@dataclass
 class GenerateOtp(BaseModel):
     token: str = Path(...)
     mobile_no: int = Path(...)

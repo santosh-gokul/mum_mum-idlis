@@ -21,9 +21,11 @@ import pyotp
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Path, Depends
 from fastapi.staticfiles import StaticFiles
+from twilio.rest import Client 
 from base64 import b32encode
 
 app = FastAPI()
+twilio_client = Client()
 chat_data = {}
 
 app.mount("/frontend/", StaticFiles(directory="frontend/"), name="static")
@@ -236,4 +238,6 @@ def generate_otp(input: GenerateOtp = Depends(GenerateOtp), graph_driver = Depen
        return JSONResponse(status_code=401, content={'success': False})
 
     totp = pyotp.TOTP(b32encode(bytes(settings.SECRET+str(input.mobile_no), 'utf-8')))
+    messages = twilio_client.messages.create(to=f"{input.mobile_no}", from_=settings.TWILIO_NUMBER,
+     body=f"Your one-time password is {totp.now()}")
     return JSONResponse(status_code=201, content={'success': True, 'data': {'otp': totp.now()}})

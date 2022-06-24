@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     HOST: str = os.environ["HOST"]
     PORT: int = os.environ["PORT"]
     SECRET: str = os.environ["SECRET"]
+    TWILIO_ACCOUNT_SID: str = os.environ["TWILIO_ACCOUNT_SID"]
+    TWILIO_AUTH_TOKEN: str = os.environ["TWILIO_AUTH_TOKEN"]
+    TWILIO_NUMBER: str = os.environ["TWILIO_NUMBER"]
 
     class Config:
         env_file = '/Users/santosh/mum_mum-idlis/.env'

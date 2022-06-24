@@ -25,7 +25,7 @@ from twilio.rest import Client
 from base64 import b32encode
 
 app = FastAPI()
-twilio_client = Client()
+twilio_client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 chat_data = {}
 
 app.mount("/frontend/", StaticFiles(directory="frontend/"), name="static")

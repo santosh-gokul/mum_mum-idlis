@@ -233,6 +233,6 @@ def generate_otp(input: GenerateOtp = Depends(GenerateOtp), graph_driver = Depen
     result = validate_token(token=input.token, graph_driver=graph_driver)
     if result.status_code!=200:
        return JSONResponse(status_code=401, content={'success': False})
-       
-    totp = pyotp.TOTP(settings.SECRET+input.mobile_no)
+
+    totp = pyotp.TOTP(settings.SECRET+str(input.mobile_no))
     return JSONResponse(status_code=201, content={'success': True, 'data': {'otp': totp.now()}})

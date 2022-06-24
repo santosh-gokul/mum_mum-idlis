@@ -20,6 +20,8 @@ from app.core.config import settings
 from app.core.graphdb import get_session
 from app.core.constants import RESERVED_COMMANDS
 from app.utilities.bot_handler import resolve_query
+from app.utilities.payload_creator import createCashFreeLinkGeneratorPayload
+from app.models.api import GenerateOtp
 
 app = FastAPI()
 chat_data = {}
@@ -76,6 +78,8 @@ def validate_token(token: str, graph_driver = Depends(get_session)):
     """
         As far as I can comprehend, this prevents any sorts of replay attack becuz of token count
         check. Also it also prevents MiM tampering attack due to the nature of JWT.
+
+
     """
     try:
         decode_data = jwt.decode(token, settings.SECRET, algorithms=["HS256"])
@@ -115,6 +119,11 @@ def populate_menu(token: str, graph_driver = Depends(get_session)):
 
 @app.post("/place_order/{token}")
 def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
+    """
+    Currently after an order is placed, we are incrementing the token count, which 
+    makes us lose track of how much order query is invoked by the client - 
+    overcome this!  
+    """
     result = validate_token(token=token, graph_driver=graph_driver)
     if result.status_code!=200:
        return JSONResponse(status_code=401, content={'success': False})
@@ -184,6 +193,9 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
     result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O;", props)
     print(list(result))
     
+    payload = createCashFreeLinkGeneratorPayload(mobile = "8277607950", unique_id = "<something>",
+    amount = 100, purpose="<Something>", expiry = "2022-10-14T15:04:05+05:30")
+    
     bot.send_message(decode_data['chat_id'], text = "We've received your order!")
 
     query = f"MATCH (C:Client) where C.client_id={decode_data['chat_id']} \
@@ -217,4 +229,6 @@ def start(bot, update, sp_info, client_info, graph_driver) -> None:
                     chat_id=update.message.chat_id)
 
 
-
+@app.get("/generate_otp/{token}/{mobile_no}")
+def generate_otp(token: str, mobile_no: GenerateOtp):
+    pass

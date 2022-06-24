@@ -230,5 +230,5 @@ def start(bot, update, sp_info, client_info, graph_driver) -> None:
 
 
 @app.get("/generate_otp/{token}")
-def generate_otp(token: str, mobile_no: GenerateOtp):
+def generate_otp(token: str, mobile_no = Depends(GenerateOtp)):
     pass

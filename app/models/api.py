@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import Path
+from fastapi import Body, Path
 from pydantic import BaseModel, validator
 
 #Need to add field level validations.
@@ -27,4 +27,12 @@ class GenerateOtp(BaseModel):
     @validator('mobile_no')
     def phone_validator(cls, v):
         assert len(str(v))==10 and str(v).isnumeric(), "Not a valid phone number."
+        return v
+
+class ValidateOtp(BaseModel):
+    otp: int = Body(...)
+
+    @validator(otp)
+    def otp_validator(cls, v):
+        assert len(str(v))==6 and str(v).isnumeric(), "Not a valid OTP."
         return v

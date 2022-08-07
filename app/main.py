@@ -9,6 +9,7 @@
 from app.core.config import settings
 from app.core.graphdb import get_session
 from app.core.constants import RESERVED_COMMANDS
+from app.models.api import GenerateOtp, ValidateOtp
 from app.utilities.bot_handler import resolve_query
 from app.utilities.payload_creator import createCashFreeLinkGeneratorPayload
 from app.models.api import GenerateOtp
@@ -16,9 +17,11 @@ from app.models.api import GenerateOtp
 import telegram
 import jwt
 import time
+import uuid
 import pyotp
 
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Path, Depends
 from fastapi.staticfiles import StaticFiles
 from twilio.rest import Client 
@@ -27,6 +30,15 @@ from base64 import b32encode
 app = FastAPI()
 twilio_client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 chat_data = {}
+
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.mount("/frontend/", StaticFiles(directory="frontend/"), name="static")
 
@@ -152,7 +164,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
             temp=f"-[I{ctr}:INCLUDES"+ "{"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
             
             if ctr == 0:
-                create_query += (f"(O:Order"+"{date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+temp)
+                create_query += (f"(O:Order"+"{order_id: $order_id, date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+temp)
             else:
                 create_query += ("(O)"+temp)
             total_order_price+=price*qty
@@ -172,7 +184,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
                 match_query+=f"({item_name}{ctr}: ProductCatalogue " + "{name: $"+f"{item_name}{ctr}"+"}), "
                 temp=f"-[I{ctr}:INCLUDES"+"{"+f"total_price:$tp_{item_name}{ctr}, quantity: $qt_{item_name}{ctr}, unit: $ut_{item_name}{ctr}"+"}"+f" ]->({item_name}{ctr}), "
                 if ctr == 0:
-                    create_query += (f"(O:Order"+"{date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+temp)
+                    create_query += (f"(O:Order"+"{order_id: $order_id,date_time: $date_time, payment_status: 'In Progress', total_amount: $total_order_price})"+temp)
                 else:
                     create_query += ("(O)"+temp)
                 total_order_price+=price*qty
@@ -186,12 +198,9 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
 
     match_query = "MATCH "+match_query
     props["date_time"] = int(time.time())
+    props["order_id"] = uuid.uuid4()
     props["total_order_price"] = total_order_price
     
-    print("MATCH: ", match_query)
-    print("CREATE: ", create_query)
-    print("TOA: ", total_order_price)
-    print("PROP: ", props)
     result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O;", props)
     print(list(result))
     
@@ -241,3 +250,11 @@ def generate_otp(input: GenerateOtp = Depends(GenerateOtp), graph_driver = Depen
     messages = twilio_client.messages.create(to=f"+91{input.mobile_no}", from_=settings.TWILIO_NUMBER,
      body=f"Your one-time password is {totp.now()}")
     return JSONResponse(status_code=201, content={'success': True})
+
+@app.post("/validate_token/{token}")
+def validate_otp(input: ValidateOtp = Depends(ValidateOtp), graph_driver = Depends(get_session)):
+    result = validate_token(token=input.token, graph_driver=graph_driver)
+    if result.status_code!=200:
+       return JSONResponse(status_code=401, content={'success': False})
+
+    

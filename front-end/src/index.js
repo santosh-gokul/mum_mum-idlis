@@ -218,7 +218,7 @@ token, totalDiscount, storeCoordinates, orderToken, storeDistance, storeName]);
       headers: { 'Content-Type': 'application/json'}
     };
     
-    fetch(baseEndpoint+"/populate_menu/"+token, requestOptions)
+    fetch(baseEndpoint+"populate_menu", requestOptions)
         .then(response => response.json())
         .then(data => {
             if(data.success){

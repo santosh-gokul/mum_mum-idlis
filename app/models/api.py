@@ -32,7 +32,7 @@ class GenerateOtp(BaseModel):
 class ValidateOtp(BaseModel):
     otp: int = Body(...)
 
-    @validator(otp)
+    @validator('otp')
     def otp_validator(cls, v):
         assert len(str(v))==6 and str(v).isnumeric(), "Not a valid OTP."
         return v

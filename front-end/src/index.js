@@ -208,7 +208,7 @@ token, totalDiscount, storeCoordinates, orderToken, storeDistance, storeName]);
     while (match = search.exec(query))
       urlParams[decode(match[1])] = decode(match[2]);
 
-    var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGF0X2lkIjo5NDk1OTY5NjgsInNwX2lkIjoiMTE0NTExMDQiLCJ0b2tlbl9pZCI6MTJ9.484IN7x8NoSP0hDVEtBWa0b4o9J5c8Fd770HVL62f9A";//jwt_decode(urlParams['identifier'])
+    var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGF0X2lkIjo5NDk1OTY5NjgsInNwX2lkIjoiMTE0NTExMDQiLCJ0b2tlbl9pZCI6MTZ9.zKs-bt0g_BNGCr_xClwNED4ed2Lg7rAErXHnwm1_bmc";//jwt_decode(urlParams['identifier'])
     setUserInfo({'userName': token.username});
     //setSessionExpiry(token.expiry);
     setToken(token);
@@ -218,7 +218,7 @@ token, totalDiscount, storeCoordinates, orderToken, storeDistance, storeName]);
       headers: { 'Content-Type': 'application/json'}
     };
     
-    fetch(baseEndpoint+"populate_menu", requestOptions)
+    fetch(baseEndpoint+"populate_menu/"+token, requestOptions)
         .then(response => response.json())
         .then(data => {
             if(data.success){

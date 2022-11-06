@@ -198,7 +198,7 @@ def place_order(data: dict, token: str, graph_driver = Depends(get_session)):
 
     match_query = "MATCH "+match_query
     props["date_time"] = int(time.time())
-    props["order_id"] = int(uuid.uuid4())
+    props["order_id"] = int(time.time())
     props["total_order_price"] = total_order_price
     
     result = graph_driver.run(match_query[:-2]+" "+create_query[:-2]+" return O;", props)

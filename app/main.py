@@ -40,7 +40,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/frontend/", StaticFiles(directory="frontend/"), name="static")
+app.mount("/frontend/", StaticFiles(directory="front-end/"), name="static")
 
 @app.get('/set_webhook') #'A general API that can be called for onboarding new service providers'
 def set_webhook(bot_token: str):
@@ -237,7 +237,7 @@ def start(bot, update, sp_info, client_info, graph_driver) -> None:
     graph_driver.run(query)
 
     encoded_jwt = jwt.encode(jwt_payload, settings.SECRET, algorithm="HS256")
-    bot.sendMessage(text=f'Please follow this link to place the order\n{settings.HEROKU_URL}frontend/index.html?identifier={encoded_jwt}',
+    bot.sendMessage(text=f'Please follow this link to place the order\n{settings.HEROKU_URL}frontend/public/index.html?identifier={encoded_jwt}',
                     chat_id=update.message.chat_id)
 
 

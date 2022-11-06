@@ -208,8 +208,8 @@ token, totalDiscount, storeCoordinates, orderToken, storeDistance, storeName]);
     while (match = search.exec(query))
       urlParams[decode(match[1])] = decode(match[2]);
 
-    var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGF0X2lkIjo5NDk1OTY5NjgsInNwX2lkIjoiMTE0NTExMDQiLCJ0b2tlbl9pZCI6MTZ9.zKs-bt0g_BNGCr_xClwNED4ed2Lg7rAErXHnwm1_bmc";//jwt_decode(urlParams['identifier'])
-    setUserInfo({'userName': token.username});
+    var token = jwt_decode(urlParams['identifier'])
+    setUserInfo({'userName': token.sp_id});
     //setSessionExpiry(token.expiry);
     setToken(token);
 
@@ -513,7 +513,6 @@ const callLoginBanner = () => {
       <ReactNotifications />{
       checkout ? renderCheckout : cartPageRender
   }
-  
   
   </div>
   );
